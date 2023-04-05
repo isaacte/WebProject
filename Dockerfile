@@ -1,49 +1,24 @@
-# Pull base image
-FROM python:3-alpine
+ARG PYTHON_VERSION=3.10-slim-buster
 
-#Create directory for the app user
-RUN mkdir -p /home/app
+FROM python:${PYTHON_VERSION}
 
-# create the app user
-RUN addgroup -S app && adduser -S app -G app
-#Set environment variables
-ENV PIP_DISABLE_PIP_VERSION_CHECK 1
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
+RUN mkdir -p /code
 
-# create the appropriate directories
-ENV HOME=/home/app
-ENV APP_HOME=/home/app/web
-RUN mkdir $APP_HOME
-WORKDIR $APP_HOME
+WORKDIR /code
 
+COPY requirements.txt /tmp/requirements.txt
 
-#Install software
-RUN apk update \
-    && apk add postgresql-dev gcc python3-dev musl-dev
-    
-#Copy project
-COPY . .
+RUN set -ex && \
+    pip install --upgrade pip && \
+    pip install -r /tmp/requirements.txt && \
+    rm -rf /root/.cache/
 
-#Install requirements.txt
-RUN pip install -r requirements.txt
+COPY . /code/
 
-#Create static and media repositories to be served via ngnix
-RUN mkdir static
-RUN mkdir media
+EXPOSE 8000
 
-
-#Copy entrypoint script
-COPY ./entrypoint.sh .
-RUN sed -i 's/\r$//g' ./entrypoint.sh
-RUN chmod +x ./entrypoint.sh
-
-#Give app user the ownership of the files
-RUN chown -R app:app $APP_HOME
-
-#Change to app user
-USER app
-
-#Set entrypoint
-ENTRYPOINT ["/home/app/web/entrypoint.sh"]
+# replace demo.wsgi with <project_name>.wsgi
+CMD ["gunicorn", "--bind", ":8000", "--workers", "2", "ReadMore.wsgi"]
