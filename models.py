@@ -2,9 +2,15 @@ from django.db import models
 from django.contrib.auth.models import User
 
 class Book(models.Model):
-    name = models.CharField(max_length = 100)
+    isbn = models.CharField(max_length = 40)
+    title = models.CharField(max_length = 100)
+    publish_date = models.DateTimeField()
+    pages_number = models.IntegerField()
+    summary = models.CharField(max_length = 2000)
+    edition = models.IntegerField()
+
     author = models.ForeignKey(Author)
-    theme = models.ForeignKey(Theme)
+    literaryGenre = models.ForeignKey(LiteraryGenre)
     def __unicode__(self):
         return self.name + " - " + self.author
 
@@ -21,7 +27,7 @@ class Valoration(models.Model):
     def __unicode__(self):
         return self.qualification
 
-class Theme(models.Model):
+class LiteraryGenre(models.Model):
     theme = models.CharField(max_length = 50)
     def __unicode__(self):
         return self.theme
