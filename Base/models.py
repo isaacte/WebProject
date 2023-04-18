@@ -39,7 +39,7 @@ class Book(models.Model):
     pages_number = models.PositiveIntegerField()
     summary = models.TextField()
     edition = models.CharField(max_length=32)
-    image = models.ImageField()
+    image = models.ImageField(blank=True, null=True)
     language = models.ForeignKey(Language, on_delete=models.CASCADE)
 
     def __unicode__(self):
@@ -67,3 +67,9 @@ class Review(models.Model):
 
     def __unicode__(self):
         return f"{self.book.title} - {self.user}"
+    
+    def save(self, *args, **kwargs):
+        if Review.objects.filter(user=self.user, book=self.book).exists():
+            Review.objects.filter(user=self.user, book=self.book).update(qualifications=self.qualifications, comment=self.comment)
+        else:
+            super().save(*args, **kwargs)        
