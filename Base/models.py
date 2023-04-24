@@ -1,6 +1,7 @@
 from django.db import models
 from django.conf import settings
 from django.core.validators import MaxValueValidator, MinValueValidator
+from datetime import date
 
 # Create your models here.
 class Author(models.Model):
@@ -64,12 +65,13 @@ class Review(models.Model):
     book = models.ForeignKey(Book, on_delete=models.CASCADE)
     qualifications = models.PositiveIntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)])
     comment = models.TextField()
+    date = models.DateField(default=date.today)
 
     def __unicode__(self):
         return f"{self.book.title} - {self.user}"
-    
-    def save(self, *args, **kwargs):
-        if Review.objects.filter(user=self.user, book=self.book).exists():
-            Review.objects.filter(user=self.user, book=self.book).update(qualifications=self.qualifications, comment=self.comment)
-        else:
-            super().save(*args, **kwargs)        
+
+class BookReview(Review):
+    book = models.ForeignKey(Book, on_delete=models.CASCADE)
+
+    class Meta:
+        unique_together = ("book", "user")
