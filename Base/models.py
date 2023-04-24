@@ -69,9 +69,6 @@ class Review(models.Model):
 
     def __unicode__(self):
         return f"{self.book.title} - {self.user}"
-
-class BookReview(Review):
-    book = models.ForeignKey(Book, on_delete=models.CASCADE)
-
+    
     class Meta:
         unique_together = ("book", "user")
