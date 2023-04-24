@@ -1,6 +1,7 @@
 from django.db import models
 from django.conf import settings
 from django.core.validators import MaxValueValidator, MinValueValidator
+from datetime import date
 
 # Create your models here.
 class Author(models.Model):
@@ -39,7 +40,7 @@ class Book(models.Model):
     pages_number = models.PositiveIntegerField()
     summary = models.TextField()
     edition = models.CharField(max_length=32)
-    image = models.ImageField()
+    image = models.ImageField(blank=True, null=True)
     language = models.ForeignKey(Language, on_delete=models.CASCADE)
 
     def __unicode__(self):
@@ -64,6 +65,10 @@ class Review(models.Model):
     book = models.ForeignKey(Book, on_delete=models.CASCADE)
     qualifications = models.PositiveIntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)])
     comment = models.TextField()
+    date = models.DateField(default=date.today)
 
     def __unicode__(self):
         return f"{self.book.title} - {self.user}"
+    
+    class Meta:
+        unique_together = ("book", "user")
