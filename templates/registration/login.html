@@ -4,7 +4,9 @@
 
 <h2> Login </h2>
 
+
 <form method="post" action="{% url 'login' %}">
+{% csrf_token %}
 <table>
     <tr>
         <td>{{ form.username.label_tag }}</td>
@@ -21,5 +23,4 @@
 
 <input type="submit" value="login" />
 
-{% csrf_token %}
 </form>
