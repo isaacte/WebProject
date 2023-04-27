@@ -19,4 +19,5 @@ def register(request : HttpRequest):
     return render(request, 'registration/register.html', {'form': form})
 
 def index(request):
-    return render(request, 'Base/index.html')
+    mockRegistered = False
+    return render(request, 'Base/index.html', {'registered': mockRegistered})
