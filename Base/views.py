@@ -4,10 +4,6 @@ from Base.forms import RegisterForm
 from django.http import HttpRequest
 
 # Create your views here.
-<<<<<<< HEAD
-def index(request):
-    return render(request, "Base/index.html")
-=======
 
 def register(request : HttpRequest):
     if request.method == 'POST':
@@ -24,4 +20,3 @@ def register(request : HttpRequest):
 
 def index(request):
     return render(request, 'Base/index.html')
->>>>>>> 44280f41c9b7c0bd205a17c27b2d0788422a5938
