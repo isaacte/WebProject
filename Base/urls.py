@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 """ReadMore URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
@@ -19,4 +20,17 @@ from .views import index
 
 urlpatterns = [
     path('', index),
+=======
+# Base URL Configuration
+
+from django.urls import path
+from django.contrib.auth import views
+from Base.views import index, register
+
+urlpatterns = [
+    path('', index, name='home'),
+    path('accounts/register/', register, name='register'),
+    path('accounts/login/', views.LoginView.as_view(), name='login'),
+    path('accounts/logout/', views.LogoutView.as_view(), name='logout'),
+>>>>>>> 44280f41c9b7c0bd205a17c27b2d0788422a5938
 ]
