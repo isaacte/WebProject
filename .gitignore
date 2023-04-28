@@ -11,7 +11,7 @@ __pycache__/
 # Distribution / packaging
 .Python
 env/
-db.sqlite3/
+db.sqlite3
 build/
 develop-eggs/
 dist/
