@@ -7,6 +7,6 @@ body {
     padding: 0;
 }
 
-.initial-element {
-    margin-top: 100px;
+#first {
+    padding-top: 60px;
 }
