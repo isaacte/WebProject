@@ -1,20 +1,63 @@
 {% extends "Base/base.html" %}
 
-{% block navbar %}{% endblock %}
+{% block title %}Login{% endblock %}
+
+{% block navbar %}
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="container">
+                <a href="{% url 'home' %}"><img class="navbar-brand logo" src="../../media/ReadMore-logo.png" alt="Logo de ReadMore"></img></a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'home' %}">Home</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+{% endblock %}
 
 {% block content %}
-<div class="container form p-3 mt-3">
-    <p><a href="../../" class="link-body-emphasis link-offset-2 link-underline-opacity-25 link-underline-opacity-75-hover">Home</a></p>
-    <h2 class="mb-4"> Login </h2>
-    <form method="POST" class="form-group">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit" class="btn btn-success">Login</button>
-    </form>
-    {% if form.errors %}
-        <div class="alert alert-danger mt-3" role="alert">
-            <div class="error">Incorrect username and password. Note that both fields may be case-sensitive.</div>
+    <div class="row justify-content-center mt-5">
+    <div class="col-md-6">
+        <div class="card initial-element">
+        <div class="card-header">Login</div>
+        <div class="card-body form-control">
+            <form method="post">
+                {% csrf_token %}
+                {% if form.errors %}
+                    <div class="alert alert-danger">
+                        <strong>Error:</strong> Please correct the following errors.
+                        <ul>
+                        {% for field, errors in form.errors.items %}
+                            {% for error in errors %}
+                            <li>{{ error }}</li>
+                            {% endfor %}
+                        {% endfor %}
+                        </ul>
+                    </div>
+                {% endif %}
+                <div class="form-group row">
+                    <label for="{{ form.username.id_for_label }}" class="col-sm-2 col-form-label">{{ form.username.label_tag }}</label>
+                    <div class="col-sm-10">
+                        {{ form.username }}
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="{{ form.password.id_for_label }}" class="col-sm-2 col-form-label">{{ form.password.label_tag }}</label>
+                    <div class="col-sm-10">
+                        {{ form.password }}
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary">Login</button>
+            </form>
         </div>
-    {% endif %}
-</div>
+        </div>
+    </div>
+    </div>
 {% endblock %}
