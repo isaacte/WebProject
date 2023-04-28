@@ -20,8 +20,8 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <form class="d-flex" role="search">
-                <input class="form-control me-2" type="search" placeholder="Buscar" aria-label="Search">
-                <button class="btn btn-outline-success" type="submit">Buscar</button>
+                <input class="form-control me-2" type="search" placeholder="Search books" aria-label="Search">
+                <button class="btn btn-outline-success" type="submit">Search</button>
                 </form>
                 <div class="collapse navbar-collapse justify-content-end" id="navbarSupportedContent">  
                     <ul class="navbar-nav ml-auto mb-2 mb-lg-0">
@@ -36,23 +36,23 @@
                         </li>
                     {% endif %}
                     <li class="nav-item">
-                        <a class="nav-link" aria-current="page" href="">Inicio</a>
+                        <a class="nav-link" aria-current="page" href="">Home</a>
                     </li>
                     <li class="nav-item">
                         {% if user.is_authenticated %}
-                            <a class="nav-link" href="#">Mis libros</a>
+                            <a class="nav-link" href="#">My books</a>
                         {% endif %}
                     </li>
                     {% if user.is_authenticated %}
                         <li class="nav-item dropdown">
-                            <a class="nav-link" href="/accounts/logout">Cerrar sesión</a>
+                            <a class="nav-link" href="/accounts/logout">Log out</a>
                         </li>
                     {% else %}
                         <li class="nav-item dropdown">
-                            <a class="nav-link" href="/accounts/login">Iniciar sesión</a>
+                            <a class="nav-link" href="/accounts/login">Log in</a>
                         </li>
                         <li class="nav-item dropdown">
-                            <a class="nav-link" href="/accounts/register">Registrarse</a>
+                            <a class="nav-link" href="/accounts/register">Sign in</a>
                         </li>
                     {% endif %}
                     </ul>
