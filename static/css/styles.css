@@ -1,3 +1,7 @@
+body {
+    background-color: #FEFEFE;
+}
+
 .logo {
     max-width: 65px;
     padding: 0;
@@ -5,4 +9,13 @@
 
 .initial-element {
     margin-top: 100px;
+}
+
+.form {
+    background-color: #EAEAEA;
+    border-radius: 1em;
+}
+
+.errorlist {
+    display: none;
 }
