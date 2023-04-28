@@ -10,12 +10,3 @@ body {
 .initial-element {
     margin-top: 100px;
 }
-
-.form {
-    background-color: #EAEAEA;
-    border-radius: 1em;
-}
-
-.errorlist {
-    display: none;
-}
