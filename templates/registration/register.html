@@ -3,10 +3,22 @@
 {% block navbar %}{% endblock %}
 
 {% block content %}
-<h2> Register </h2>
-<form method="POST" class="form-group">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit" class="btn btn-success">Register</button>
-</form>
+<div class="container form p-3 mt-3">
+    <p><a href="../../" class="link-body-emphasis link-offset-2 link-underline-opacity-25 link-underline-opacity-75-hover">Home</a></p>
+    <h2 class="mb-4"> Register </h2>
+    <form method="POST" class="form-group">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-success">Register</button>
+    </form>
+    {% if form.errors %}
+        <div class="alert alert-danger mt-3" role="alert">
+            {% for field in form %}
+                {% for error in field.errors %}
+                    <div class="error">- {{ error }}</div>
+                {% endfor %}
+            {% endfor %}
+        </div>
+    {% endif %}
+</div>
 {% endblock %}

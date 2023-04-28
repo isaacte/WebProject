@@ -15,3 +15,7 @@ body {
     background-color: #EAEAEA;
     border-radius: 1em;
 }
+
+.errorlist {
+    display: none;
+}
