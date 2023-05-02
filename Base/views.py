@@ -12,8 +12,6 @@ def register(request : HttpRequest):
             user = form.save()
             login(request, user)
             return redirect('home')
-        else:
-            print(form.errors)
     else:
         form = RegisterForm()
     return render(request, 'registration/register.html', {'form': form})
