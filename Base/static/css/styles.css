@@ -1,18 +1,24 @@
+/* Global variables */
+:root {
+    --primary-color: #01a7b7;
+    --gray: #2e2f2f;
+}
 
-/* Estilos para el cuerpo */
+/* Body styles */
 body {
     background-color: #e6e6e6;
+    background-color: var(--primary-color);
     font-family: Arial, sans-serif;
 }
 
-/* Estilos para la cabecera */
+/* Header styles */
 header {
-    background-color: #01a7b7;
+    background-color: var(--gray);
     padding: 1rem;
 }
 
 .navbar {
-    background-color: #2e2f2f !important;
+    background-color: var(--gray);
     max-height: 100px;
 }
 
@@ -38,7 +44,7 @@ header {
 }
 
 .navbar-nav .nav-link:hover {
-    color: #01a7b7;
+    color: var(--primary-color);
 }
 
 .dropdown-menu {
@@ -52,7 +58,7 @@ header {
 }
 
 .dropdown-menu a:hover {
-    color: #01a7b7;
+    color: var(--primary-color);
 }
 
 /* Estilos para la sección principal */
