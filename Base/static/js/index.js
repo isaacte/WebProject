@@ -8,7 +8,7 @@ const listBooks = async() => {
     }
 }
 
-const getBookCard(book) {
+const getBookCard = (book) => {
     return `<img src="../../static/images/loading_background.avif" class="card-img-top" alt="INSERTAR AQUÍ IMAGEN">
     <div class="card-body">
       <h5 class="card-title">${book["title"]}</h5>
