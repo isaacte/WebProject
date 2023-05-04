@@ -1,5 +1,6 @@
 db.sqlite3
 migrations
+media
 
 # Created by .ignore support plugin (hsz.mobi)
 ### Python template
