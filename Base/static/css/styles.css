@@ -7,13 +7,12 @@ body {
 
 /* Estilos para la cabecera */
 header {
-    background-color: #01a7b7;
+    background-color: #2e2f2f;
     padding: 1rem;
 }
 
 .navbar {
     background-color: #2e2f2f !important;
-    max-height: 100px;
 }
 
 .navbar-brand {
