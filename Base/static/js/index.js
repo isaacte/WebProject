@@ -20,9 +20,8 @@ const getBookCard = (book) => {
 const setUp = async() => {
     books = await listBooks();
     firstBook = books["books"][0];
-    console.log(firstBook);
-    console.log(firstBook["title"]);
-    var firstElement = document.getElementById("firstElement"); // src="../../../media/${firstBook["image"]}"
+    bestRatedBooks = document.getElementById("best-rated-books");
+    console.log(bestRatedBooks);
     card = getBookCard(firstBook)
     firstElement.innerHTML = getBookCard(firstBook);
 }
