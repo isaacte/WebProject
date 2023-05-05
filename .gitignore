@@ -1,3 +1,7 @@
+db.sqlite3
+migrations
+media
+
 # Created by .ignore support plugin (hsz.mobi)
 ### Python template
 # Byte-compiled / optimized / DLL files
@@ -11,6 +15,7 @@ __pycache__/
 # Distribution / packaging
 .Python
 env/
+db.sqlite3
 build/
 develop-eggs/
 dist/

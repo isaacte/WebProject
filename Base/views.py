@@ -1,9 +1,10 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate
+from django.http.response import JsonResponse
 from Base.forms import RegisterForm
 from django.http import HttpRequest
-
-# Create your views here.
+from django.views import View
+from .models import Book
 
 def register(request : HttpRequest):
     if request.method == 'POST':
