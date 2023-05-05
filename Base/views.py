@@ -19,23 +19,3 @@ def register(request : HttpRequest):
 
 def index(request):
     return render(request, 'Base/index.html')
-
-class BookView(View):
-    def get(self, request):
-        books = list(Book.objects.values())
-
-        if len(books) > 0:
-            data = {'message': 'success', 'books': books}
-        else:
-            data = {'message': 'books not found'}
-        return JsonResponse(data)
-
-
-    def post(self, request):
-        pass
-
-    def put(self, request):
-        pass
-
-    def delete(self, request):
-        pass
