@@ -13,21 +13,36 @@ const listBooks = async() => {
     }
 }
 
-// Return the authors of a book
-const getAuthorsName = (book) => {
+// Return the names of the book's authors
+const getAuthorsString = (book) => {
     authors = book.authors;
     var names = [];
     for (const i in authors) {
         names.push(authors[i]['name']);
     }
-    return names;
+
+    // Convert list to sting
+    if (names.length == 0) {
+        return "Anonymous";
+    } else {
+        var authorsString = `${names[0]}`;
+        names.shift();
+        while(names.length > 0) {
+            authorsString += `, ${names[0]}`;
+            names.shift();
+        }
+    }
+    
+    
+    return authorsString;
 }
 
 // Return the html of a book card from a book object
 const getBookCard = (book, authors) => {
+    console.log(book['image']);
     return `<div class="col-3 col-sm-6 col-md-4 col-lg-3">
         <div class="card mb-3">
-           <img src="${book["image"]}" class="card-img-top" alt="INSERTAR AQUÍ IMAGEN">
+           <img src="${book["image"]}" class="card-img-top" alt="Book cover of '${book["title"]}'">
            <div class="card-body">
                 <h5 class="card-title">${book["title"]}</h5>
                 <p class="card-text">${book["summary"]}</p>
@@ -46,19 +61,10 @@ const setUp = async() => {
         bestRatedBooks = document.getElementById("best-rated-books");
         var html = "";
         
+        // Add info to HTML
         for (const i in books) {
-            // Build author's format
-            var authors = getAuthorsName(books[i]);
-            var authorsString = `${authors[0]}`;
-            console.log(authors);
-            authors.shift();
-            while(authors.length > 0) {
-                authorsString += `, ${authors[0]}`;
-                authors.shift();
-            }
-
-            // Add info to HTML
-            html += getBookCard(books[i], authorsString);
+            var authors = getAuthorsString(books[i]);
+            html += getBookCard(books[i], authors);
         }
         bestRatedBooks.innerHTML = html;
     }
