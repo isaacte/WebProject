@@ -1,3 +1,6 @@
+// Constants declaration
+MAX_WRITERS_SHOWED = 2;
+
 // Return a list of books from a json object. Return null if there aren't any book.
 const listBooks = async() => {
     try {
@@ -14,7 +17,7 @@ const listBooks = async() => {
 }
 
 // Return the names of the book's authors
-const getAuthorsString = (book) => {
+const getAuthorsString = (book, maxAuthors = -1) => {
     authors = book.authors;
     var names = [];
     for (const i in authors) {
@@ -22,14 +25,22 @@ const getAuthorsString = (book) => {
     }
 
     // Convert list to sting
+    authorsAdded = 0;
     if (names.length == 0) {
         return "Anonymous";
     } else {
         var authorsString = `${names[0]}`;
+        authorsAdded++;
         names.shift();
-        while(names.length > 0) {
+        while (names.length > 0 && (maxAuthors == -1 || authorsAdded < maxAuthors)) {
+            console.log(authorsAdded);
             authorsString += `, ${names[0]}`;
+            authorsAdded++;
             names.shift();
+        }
+
+        if (names.length > 0) {
+            authorsString += ' and others';
         }
     }
     
@@ -63,7 +74,7 @@ const setUp = async() => {
         
         // Add info to HTML
         for (const i in books) {
-            var authors = getAuthorsString(books[i]);
+            var authors = getAuthorsString(books[i], MAX_WRITERS_SHOWED);
             html += getBookCard(books[i], authors);
         }
         bestRatedBooks.innerHTML = html;
