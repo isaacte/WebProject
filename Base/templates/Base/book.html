@@ -1,0 +1,41 @@
+{% extends "Base/base.html" %}
+
+{% block title %}Index{% endblock %}
+
+{% block content %}
+    <h1>{{ book.title }}</h1>
+    <div class="row">
+        <div class="col-sm-12 col-md-6 col-lg-4 my-2">
+            <img class="img-fluid" src="{{ book.image.url }}">
+            <table class="table">
+                <tbody>
+                  <tr>
+                    <th scope="row">Authors</th>
+                    <td id="authors-field"></td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Pages</th>
+                    <td>{{ book.pages_number }}</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Publish date</th>
+                    <td colspan="2">{{ book.publish_date }}</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Edition</th>
+                    <td colspan="2">{{ book.edition }}</td>
+                  </tr>
+                </tbody>
+              </table>
+        </div>
+        <div class="col-sm-12 col-md-6 col-lg-8 my-2">
+            <p>{{ book.summary }}</p>
+        </div>
+    </div>
+{% endblock %}
+{% block js %}
+    <script>
+        let bookIsbn = '{{ book.ISBN }}';
+    </script>
+    <script src="../../static/js/book.js"></script>
+{% endblock %}
