@@ -26,23 +26,41 @@ const getAuthorsString = (book, maxAuthors = -1) => {
 
     // Convert list to sting
     authorsAdded = 0;
-    if (names.length == 0) {
+    if (authors.length == 0) {
         return "Anonymous";
     } else {
-        var authorsString = `${names[0]}`;
+        var authorsString = `<a class="author-link link-secondary" href="author/${authors[0].id}">${authors[0].name}</a>`;
         authorsAdded++;
-        names.shift();
-        while (names.length > 0 && (maxAuthors == -1 || authorsAdded < maxAuthors)) {
-            console.log(authorsAdded);
-            authorsString += `, ${names[0]}`;
+        authors.shift();
+        while (authors.length > 0 && (maxAuthors == -1 || authorsAdded < maxAuthors)) {
+            authorsString += `, <a class="author-link link-secondary" href="author/${authors[0].id}">${authors[0].name}</a>`;
             authorsAdded++;
-            names.shift();
+            authors.shift();
         }
 
-        if (names.length > 0) {
+        if (authors.length > 0) {
             authorsString += ' and others';
         }
     }
+
+    // authorsAdded = 0;
+    // if (names.length == 0) {
+    //     return "Anonymous";
+    // } else {
+    //     var authorsString = `${names[0]}`;
+    //     authorsAdded++;
+    //     names.shift();
+    //     while (names.length > 0 && (maxAuthors == -1 || authorsAdded < maxAuthors)) {
+    //         console.log(authors[0])
+    //         authorsString += `, <a class="author_link" href="author/${authors[0].id}">${names[0]}</a>`;
+    //         authorsAdded++;
+    //         names.shift();
+    //     }
+
+    //     if (names.length > 0) {
+    //         authorsString += ' and others';
+    //     }
+    // }
     
     
     return authorsString;
