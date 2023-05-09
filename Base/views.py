@@ -26,3 +26,7 @@ def index(request):
 def author(request, author_id):
     author = get_object_or_404(Author, id = author_id)
     return render(request, 'Base/author.html', {'author': author})
+
+def book(request, isbn):
+    book = get_object_or_404(Book, ISBN = isbn)
+    return render(request, 'Base/book.html', {'book': book})

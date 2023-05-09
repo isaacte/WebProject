@@ -42,34 +42,14 @@ const getAuthorsString = (book, maxAuthors = -1) => {
             authorsString += ' and others';
         }
     }
-
-    // authorsAdded = 0;
-    // if (names.length == 0) {
-    //     return "Anonymous";
-    // } else {
-    //     var authorsString = `${names[0]}`;
-    //     authorsAdded++;
-    //     names.shift();
-    //     while (names.length > 0 && (maxAuthors == -1 || authorsAdded < maxAuthors)) {
-    //         console.log(authors[0])
-    //         authorsString += `, <a class="author_link" href="author/${authors[0].id}">${names[0]}</a>`;
-    //         authorsAdded++;
-    //         names.shift();
-    //     }
-
-    //     if (names.length > 0) {
-    //         authorsString += ' and others';
-    //     }
-    // }
-    
     
     return authorsString;
 }
 
 // Return the html of a book card from a book object
 const getBookCard = (book, authors) => {
-    console.log(book['image']);
     return `<div class="col-3 col-sm-6 col-md-4 col-lg-3">
+    <a class="book-card link-underline link-underline-opacity-0 text-dark" href="./book/${book["ISBN"]}">
         <div class="card mb-3">
            <img src="${book["image"]}" class="card-img-top" alt="Book cover of '${book["title"]}'">
            <div class="card-body">
@@ -78,6 +58,7 @@ const getBookCard = (book, authors) => {
                 <p class="card-text"><small class="text-body-secondary">${authors}</small></p>
            </div>
         </div>
+    </a>
     </div>`;
 }
 
