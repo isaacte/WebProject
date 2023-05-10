@@ -19,10 +19,6 @@ const listBooks = async() => {
 // Return the names of the book's authors
 const getAuthorsString = (book, maxAuthors = -1) => {
     authors = book.authors;
-    var names = [];
-    for (const i in authors) {
-        names.push(authors[i]['name']);
-    }
 
     // Convert list to sting
     authorsAdded = 0;
@@ -48,7 +44,7 @@ const getAuthorsString = (book, maxAuthors = -1) => {
 
 // Return the html of a book card from a book object
 const getBookCard = (book, authors) => {
-    return `<div class="col-3 col-sm-6 col-md-4 col-lg-3">
+    return `<div class="col-sm-6 col-md-4 col-lg-2">
     <a class="book-card link-underline link-underline-opacity-0 text-dark" href="./book/${book["ISBN"]}">
         <div class="card mb-3">
            <img src="${book["image"]}" class="card-img-top" alt="Book cover of '${book["title"]}'">
@@ -68,7 +64,7 @@ const setUp = async() => {
     if (books == null) {
         console.log("There aren't books");
     } else {
-        bestRatedBooks = document.getElementById("best-rated-books");
+        var bestRatedBooks = document.getElementById("best-rated-books");
         var html = "";
         
         // Add info to HTML

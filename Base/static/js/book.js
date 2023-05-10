@@ -47,3 +47,32 @@ window.addEventListener("load", async () => {
     console.log(bookIsbn);
     await setUp();
 });
+
+readButton = document.getElementById("read-button");
+removeBookButton = document.getElementById("remove-book-button");
+
+added = false;
+
+// Add book in the user's list
+readButton.addEventListener('click', () => {
+    if (!added) {
+        readButton.classList.remove("btn-primary");
+        readButton.classList.add("btn-success");
+        readButton.setAttribute('data-bs-toggle', 'modal');
+        readButton.setAttribute('data-bs-target', '#read-button-backdrop');
+        readButton.innerHTML = "Read";
+        added = true;
+    }
+});
+
+// Remove book from the user's list
+removeBookButton.addEventListener('click', () => {
+    if (added) {
+        readButton.classList.remove("btn-success");
+        readButton.classList.add("btn-primary");
+        readButton.removeAttribute('data-bs-toggle');
+        readButton.removeAttribute('data-bs-target');
+        readButton.innerHTML = "Mark as read";
+        added = false;
+    }
+});
