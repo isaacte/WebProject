@@ -6,7 +6,7 @@ from django.http import HttpResponseRedirect
 from Base.forms import RegisterForm
 from django.http import HttpRequest
 from django.views import View
-from .models import Book, Author
+from .models import Book, Author, LiteraryGenre
 from django.shortcuts import get_object_or_404
 
 def register(request : HttpRequest):
@@ -21,7 +21,8 @@ def register(request : HttpRequest):
     return render(request, 'registration/register.html', {'form': form})
 
 def index(request):
-    return render(request, 'Base/index.html')
+    themes = LiteraryGenre.objects.all()
+    return render(request, 'Base/index.html', {'themes': themes})
 
 def author(request, author_id):
     author = get_object_or_404(Author, id = author_id)
