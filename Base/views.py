@@ -8,6 +8,7 @@ from django.http import HttpRequest
 from django.views import View
 from .models import Book, Author
 from django.shortcuts import get_object_or_404
+import requests
 
 def register(request : HttpRequest):
     if request.method == 'POST':
@@ -30,3 +31,7 @@ def author(request, author_id):
 def book(request, isbn):
     book = get_object_or_404(Book, ISBN = isbn)
     return render(request, 'Base/book.html', {'book': book})
+
+def search_book(request, query):
+    result = requests.get(f'https://openlibrary.org/search.json?q={query}')
+    return JsonResponse(result.json())
