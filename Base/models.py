@@ -2,9 +2,11 @@ from django.db import models
 from django.conf import settings
 from django.core.validators import MaxValueValidator, MinValueValidator
 from datetime import date
+from statistics import mean
 
 # Create your models here.
 class Author(models.Model):
+    openlibrary_key = models.CharField(max_length=20, unique=True)
     name = models.CharField(max_length=32)
     biography = models.TextField()
     birth_date = models.DateField()
@@ -35,6 +37,7 @@ class Language(models.Model):
 
 class Book(models.Model):
     ISBN = models.CharField(max_length=13, primary_key=True)
+    openlibrary_key = models.CharField(max_length=15, unique=True)
     title = models.CharField(max_length=32)
     publish_date = models.DateField()
     pages_number = models.PositiveIntegerField()
@@ -42,9 +45,17 @@ class Book(models.Model):
     edition = models.CharField(max_length=32)
     image = models.ImageField(blank=True, null=True)
     language = models.ForeignKey(Language, on_delete=models.CASCADE)
+    addition_date = models.DateTimeField(auto_now_add=True)
 
     def __unicode__(self):
         return self.title
+
+    @property
+    def qualification(self):
+        qualifications = self.review_set.values_list('qualification', flat=True)
+        if qualifications:
+            return mean(qualifications)
+        return None
 
 class AuthorInBook(models.Model):
     author = models.ForeignKey(Author, on_delete=models.CASCADE)
@@ -63,7 +74,7 @@ class LiteraryGenreInBook(models.Model):
 class Review(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     book = models.ForeignKey(Book, on_delete=models.CASCADE)
-    qualifications = models.PositiveIntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)])
+    qualification = models.PositiveIntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)])
     comment = models.TextField()
     date = models.DateField(default=date.today)
 
