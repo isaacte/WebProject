@@ -3,7 +3,7 @@
 from django.urls import path, include
 from django.contrib.auth import views
 from rest_framework import routers
-from Base.views import index, register, author, book, search_book
+from Base.views import index, register, author, book, search_book, my_books
 from .api import BookViewSet, AuthorInBookViewSet, AuthorViewSet, BooksFromUserSet
 
 router = routers.DefaultRouter()
@@ -15,6 +15,7 @@ router.register('user-books', BooksFromUserSet, 'booksFromUserSet')
 
 urlpatterns = [
     path('', index, name='home'),
+    path('my_books', my_books, name='my books'),
     path('accounts/register/', register, name='register'),
     path('accounts/login/', views.LoginView.as_view(), name='login'),
     path('accounts/logout/', views.LogoutView.as_view(), name='logout'),

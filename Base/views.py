@@ -25,6 +25,9 @@ def index(request):
     themes = LiteraryGenre.objects.all()
     return render(request, 'Base/index.html', {'themes': themes})
 
+def my_books(request):
+    return render(request, 'Base/my_books.html')
+
 def author(request, author_id):
     author = get_object_or_404(Author, id = author_id)
     return render(request, 'Base/author.html', {'author': author})

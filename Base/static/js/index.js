@@ -3,17 +3,32 @@ MAX_WRITERS_SHOWED = 2;
 
 // Return a list of books from a json object. Return null if there aren't any book.
 const listBooks = async() => {
-    try {
-        const response = await fetch("./api/books");
-        const data = await response.json();
-        if (data.length == 0) {
-            return null;
-        } else {
-            return data;
+    // try {
+    //     const response = await fetch("./api/books");
+    //     const data = await response.json();
+    //     if (data.length == 0) {
+    //         return null;
+    //     } else {
+    //         return data;
+    //     }
+    // } catch (error) {
+    //     console.log(error);
+    // }
+
+    $.ajax({
+        url: "./api/books",
+        type: "GET",
+        success: function(data) {
+            if (data.length == 0) {
+                return null;
+            } else {
+                return data;
+            }
+        },
+        error: function(error) {
+            console.log(error);
         }
-    } catch (error) {
-        console.log(error);
-    }
+    });
 }
 
 // Return the names of the book's authors
@@ -58,9 +73,31 @@ const getBookCard = (book, authors) => {
     </div>`;
 }
 
+// const subjects = () => {
+//     $.ajax({
+//         url: "https://openlibrary.org/subjects/list.json",
+//         type: "GET",
+//         success: function(data) {
+//             console.log(data.works);
+//             return data;
+//         },
+//         error: function(error) {
+//             console.log(error);
+//         }
+//     });
+// }
+
+// Create list of subjects
+// createSubjectsList = () => {
+//     subjectList = document.getElementById('subjects-list');
+//     subjects();
+
+// }
+
 // Load books of the main screen
 const setUp = async() => {
-    books = await listBooks();
+    // await createSubjectsList();
+    books = listBooks();
     if (books == null) {
         console.log("There aren't books");
     } else {

@@ -26,7 +26,23 @@
       </div>
     <button id="brb-see-more-button" type="button" class="btn mb-3 btn-outline-dark">See more</button>
 
-    {% for theme in themes %}
+    <h1 class="fs-3">Subjects</h1>
+    <hr>
+    <ul id="subjects-list" class="list-group list-group-flush">
+      <li class="list-group-item">Art</li>
+      <li class="list-group-item">Animals</li>
+      <li class="list-group-item">Fiction</li>
+      <li class="list-group-item">Science/Mathematics</li>
+      <li class="list-group-item">Business</li>
+      <li class="list-group-item">Infantile</li>
+      <li class="list-group-item">History</li>
+      <li class="list-group-item">Health</li>
+      <li class="list-group-item">Biography</li>
+      <li class="list-group-item">Social science</li>
+      <li class="list-group-item">Places</li>
+      <li class="list-group-item">Text books</li>
+    </ul>
+    <!-- {% for theme in themes %}
     <h1 class="fs-3">{{theme.name}}</h1>
     <hr>
     <div class="row" id="{{theme.name}}">
@@ -47,7 +63,7 @@
           </div>
         </div>
       {% endfor %}
-    </div>
+    </div> -->
   <button id="brb-see-more-button" type="button" class="btn mb-3 btn-outline-dark">See more</button>
     {% endfor %}
 {% endblock %}
