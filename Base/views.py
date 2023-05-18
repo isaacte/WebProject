@@ -6,7 +6,7 @@ from django.http import HttpResponseRedirect
 from Base.forms import RegisterForm
 from django.http import HttpRequest, HttpResponseBadRequest, HttpResponseNotFound
 from django.views import View
-from .models import Book, Author, LiteraryGenre, BookInUserLibrary
+from .models import Book, Author, BookInUserLibrary
 from django.shortcuts import get_object_or_404
 import requests
 from .utils import get_book
@@ -23,14 +23,13 @@ def register(request : HttpRequest):
     return render(request, 'registration/register.html', {'form': form})
 
 def index(request):
-    themes = LiteraryGenre.objects.all()
-    return render(request, 'Base/index.html', {'themes': themes})
+    return render(request, 'Base/index.html')
 
 def my_books(request):
     return render(request, 'Base/my_books.html')
 
 def author(request, author_id):
-    a = get_object_or_404(Author, id = author_id)
+    a = get_object_or_404(Author, openlibrary_key = author_id)
     return render(request, 'Base/author.html', {'author': a})
 
 def book(request, key):

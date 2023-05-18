@@ -43,27 +43,18 @@
 
             <table class="table">
                 <tbody>
-                  <tr>
                     <th scope="row">Authors</th>
-                    <td id="authors-field"></td>
-                      <ul>
-                          {% for author in authors %}
-                              <li><a href="{% url 'author'  author.author.openlibrary_key%}">{{ author.author.name }}</a></li>
-                          {% endfor %}
-                      </ul>
-                  </tr>
-                  <tr>
-                    <th scope="row">Genres</th>
-                    <td id="authors-field"></td>
-                      <ul>
-                          {% for genre in genres %}
-                              <li><a href="{% url 'subject'  genre.literary_genre.name %}">{{ genre.literary_genre.name }}</a></li>
-                          {% endfor %}
-                      </ul>
-                  </tr>
-
+                    <tr>
+                        <td id="authors-field">
+                        <ul>
+                            {% for author in authors %}
+                                <li><a href="{% url 'author'  author.author.openlibrary_key%}">{{ author.author.name }}</a></li>
+                            {% endfor %}
+                        </ul>
+                        </td>
+                    </tr>
                 </tbody>
-              </table>
+            </table>
         </div>
         <div class="col-sm-12 col-md-6 col-lg-8 my-2">
             <p>{{ book.summary }}</p>
