@@ -3,7 +3,7 @@
 from django.urls import path, include
 from django.contrib.auth import views
 from rest_framework import routers
-from Base.views import index, register, author, book, search_book
+from Base.views import index, register, author, book, search_book, subject
 from .api import BookViewSet, AuthorInBookViewSet, AuthorViewSet, BooksFromUserSet
 
 router = routers.DefaultRouter()
@@ -19,7 +19,8 @@ urlpatterns = [
     path('accounts/login/', views.LoginView.as_view(), name='login'),
     path('accounts/logout/', views.LogoutView.as_view(), name='logout'),
     path('author/<int:author_id>', author, name='author'),
-    path('book/<str:isbn>', book, name='book'),
+    path('book/<str:key>', book, name='book'),
     path('api/search_book/<str:query>', search_book, name='search_book'),
     path('api/', include(router.urls)),
+    path('subject/<str:sub>', subject, name='subject'),
 ]

@@ -1,11 +1,11 @@
 from rest_framework import serializers
-from .models import Book, Author, AuthorInBook
+from .models import Book, Author, AuthorInBook, BookInUserLibrary
 
 class BookSerializer(serializers.ModelSerializer):
     authors = serializers.SerializerMethodField()
     class Meta:
         model = Book
-        fields = ('ISBN', 'title', 'publish_date', 'pages_number', 'summary', 'edition', 'image', 'language', 'authors', 'qualification', 'addition_date')
+        fields = ('openlibrary_key', 'title', 'summary', 'image', 'authors', 'qualification')
     
     def get_authors(self, obj):
         authors = []
@@ -23,4 +23,9 @@ class AuthorInBookSerializer(serializers.ModelSerializer):
 class AuthorSerializer(serializers.ModelSerializer):
     class Meta:
         model = Author
-        fields = ('id', 'name', 'biography', 'birth_date', 'decease_date', 'image')
+        fields = ('openlibrary_key', 'name', 'biography', 'birth_date', 'decease_date', 'image')
+
+class BookInUserLibrarySerializer(serializers.ModelSerializer):
+    class Meta:
+        field = BookInUserLibrary
+        fields = ['book']
