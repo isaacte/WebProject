@@ -36,7 +36,7 @@ class Language(models.Model):
         return f"{self.code - self.name}"
 
 class Book(models.Model):
-    openlibrary_key = models.CharField(max_length=15, primary_key=True)
+    openlibrary_book_key = models.CharField(max_length=15, primary_key=True)
     ISBN = models.CharField(max_length=13)
     title = models.CharField(max_length=32)
     publish_date = models.DateField()
