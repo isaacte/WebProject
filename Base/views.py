@@ -29,7 +29,7 @@ def my_books(request):
     return render(request, 'Base/my_books.html')
 
 def author(request, author_id):
-    a = get_object_or_404(Author, id = author_id)
+    a = get_object_or_404(Author, openlibrary_key = author_id)
     return render(request, 'Base/author.html', {'author': a})
 
 def book(request, key):
