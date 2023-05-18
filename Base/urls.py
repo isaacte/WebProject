@@ -3,7 +3,7 @@
 from django.urls import path, include
 from django.contrib.auth import views
 from rest_framework import routers
-from Base.views import index, register, author, book, search_book
+from Base.views import index, register, author, book, search_book, subject
 from .api import BookViewSet, AuthorInBookViewSet, AuthorViewSet, BooksFromUserSet
 
 router = routers.DefaultRouter()
@@ -22,4 +22,5 @@ urlpatterns = [
     path('book/<str:isbn>', book, name='book'),
     path('api/search_book/<str:query>', search_book, name='search_book'),
     path('api/', include(router.urls)),
+    path('subject/<str:sub>', subject, name='subject'),
 ]

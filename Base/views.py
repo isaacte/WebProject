@@ -4,11 +4,12 @@ from django.http.response import JsonResponse
 from django.urls import reverse
 from django.http import HttpResponseRedirect
 from Base.forms import RegisterForm
-from django.http import HttpRequest
+from django.http import HttpRequest, HttpResponseBadRequest
 from django.views import View
-from .models import Book, Author
+from .models import Book, Author, BookInUserLibrary
 from django.shortcuts import get_object_or_404
 import requests
+from .utils import  get_book
 
 def register(request : HttpRequest):
     if request.method == 'POST':
@@ -35,3 +36,17 @@ def book(request, isbn):
 def search_book(request, query):
     result = requests.get(f'https://openlibrary.org/search.json?q={query}')
     return JsonResponse(result.json())
+
+def subject(request, sub):
+    return render(request, 'Base/subject.html', {'subject': sub})
+
+def save_book(request):
+    if request.method != 'POST':
+        return HttpResponseBadRequest(f"Method not allowed.", status=405)
+    b = get_book(request.POST.get('book_id'))
+    if b:
+        if not BookInUserLibrary.objects.filter(book = b, user = request.user).exists():
+            BookInUserLibrary.objects.create(book = b, user=request.user)
+            return JsonResponse(200, {})
+        return HttpResponseBadRequest("Book already in your library.")
+    return HttpResponseBadRequest("Book not found.")

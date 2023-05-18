@@ -1,8 +1,8 @@
-from rest_framework import viewsets, permissions, mixins, filters, generics
+from rest_framework import viewsets, permissions, mixins, filters, generics, status
 from rest_framework.response import Response
 
 from .models import Book, AuthorInBook, Author
-from .serializers import BookSerializer, AuthorInBookSerializer, AuthorSerializer
+from .serializers import BookSerializer, AuthorInBookSerializer, AuthorSerializer, BookInUserLibrarySerializer
 from django.db.models import Avg, F
 import requests
 
@@ -11,7 +11,7 @@ class BookViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.AllowAny]
     serializer_class = BookSerializer
     filter_backends = [filters.OrderingFilter]
-    ordering_fields = ['ISBN', 'title', 'publish_date', 'pages_number', 'summary', 'edition', 'language', 'addition_date', 'qualification_avg']
+    ordering_fields = ['openlibrary_key', 'title', 'summary', 'image', 'addition_date', 'qualification_avg']
     ordering = ['addition_date']
 
     def get_ordering(self):
@@ -30,7 +30,7 @@ class AuthorViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.AllowAny]
     serializer_class = AuthorSerializer
 
-class BooksFromUserSet(mixins.ListModelMixin, viewsets.GenericViewSet):
+class BooksFromUserSet(generics.ListCreateAPIView, viewsets.GenericViewSet):
     permission_classes = [permissions.IsAuthenticated]
     serializer_class = BookSerializer
     def get_queryset(self):

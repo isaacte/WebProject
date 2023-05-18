@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Book, Author, AuthorInBook
+from .models import Book, Author, AuthorInBook, BookInUserLibrary
 
 class BookSerializer(serializers.ModelSerializer):
     authors = serializers.SerializerMethodField()
@@ -24,3 +24,8 @@ class AuthorSerializer(serializers.ModelSerializer):
     class Meta:
         model = Author
         fields = ('openlibrary_key', 'name', 'biography', 'birth_date', 'decease_date', 'image')
+
+class BookInUserLibrarySerializer(serializers.ModelSerializer):
+    class Meta:
+        field = BookInUserLibrary
+        fields = ['book']
