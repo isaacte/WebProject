@@ -6,7 +6,7 @@ $(function () {
         source: function (request, response) {
             $.ajax({
                 
-                url: "https://openlibrary.org/search.json?title=harry",
+                url: "https://openlibrary.org/search.json?title=" + request.term,
                 dataType: "json",
                 data: {
                     featureClass: "P",
@@ -18,16 +18,16 @@ $(function () {
                 
                 
                 success: function (data) {
-                    console.log("hola");
-                    response($.map(data.docs, function (item) {
-                        console.log("hola2");
+
+                    response($.map(data.docs.slice(0,5), function (item) {
+
                         return {
                             label: item.title
                         }
                     }));
                 },
                 error: function(error) {
-                    console.log("adeu");
+
                     console.log(error);
                 }
             });
