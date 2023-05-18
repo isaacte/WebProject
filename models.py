@@ -8,15 +8,15 @@ class Book(models.Model):
     pages_number = models.IntegerField()
     summary = models.CharField(max_length = 2000)
     edition = models.IntegerField()
-    
+
     author = models.ForeignKey(Author)
-    theme = models.ForeignKey(Theme)
-    def _unicode_(self):
+    literaryGenre = models.ForeignKey(LiteraryGenre)
+    def __unicode__(self):
         return self.name + " - " + self.author
 
 class Author(models.Model):
     name = models.CharField(max_length = 50)
-    def _unicode_(self):
+    def __unicode__(self):
         return self.name
 
 class Valoration(models.Model):
@@ -24,15 +24,13 @@ class Valoration(models.Model):
     book = models.ForeignKey(Book)
     video = models.ForeignKey(VideoReview)
     user = models.ForeignKey(User)
-    def _unicode_(self):
+    def __unicode__(self):
         return self.qualification
 
-class Theme(models.Model):
+class LiteraryGenre(models.Model):
     theme = models.CharField(max_length = 50)
-    def _unicode_(self):
+    def __unicode__(self):
         return self.theme
 
 class VideoReview(models.Model):
     url = models.CharField(max_length = 200)
-
-# Create your models here.

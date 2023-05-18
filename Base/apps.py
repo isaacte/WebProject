@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
 
-class ReadmorewebConfig(AppConfig):
+class BaseConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'ReadMoreWeb'
+    name = 'Base'
