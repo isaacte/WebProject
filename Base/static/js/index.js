@@ -61,7 +61,6 @@ const getBookCard = (book, authors) => {
         cover = "../../static/images/NoCover.jpeg";
     } else {
         cover = book["image"];
-        console.log(book["image"]);
     }
     if (book["summary"] == null) {
         summary = "There aren't any summary for this book :(";
@@ -71,6 +70,7 @@ const getBookCard = (book, authors) => {
         summary = book["summary"].slice(0, 49) + "...";
     }
 
+    // Return html
     return `<div class="col-sm-6 col-md-4 col-lg-2">
     <a class="book-card link-underline link-underline-opacity-0 text-dark" href="./book/${book["openlibrary_key"]}">
         <div class="card mb-3">
@@ -87,10 +87,19 @@ const getBookCard = (book, authors) => {
 
 // Load books of the main screen
 const setUp = () => {
-    // await createSubjectsList();
-    books = listBooks();
+    books = listBooks();    
 }
 
 window.addEventListener("load", () => {
     setUp();
 });
+
+listItems = document.querySelectorAll(".list-group-item");
+
+for (i = 0; i < listItems.length; i++) {
+    let item = listItems[i];
+    item.addEventListener("click", () => {
+        subject = item.getAttribute('data-subject');
+        location.href = `./subject/${subject}`;
+    });
+}
