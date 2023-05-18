@@ -73,27 +73,6 @@ const getBookCard = (book, authors) => {
     </div>`;
 }
 
-// const subjects = () => {
-//     $.ajax({
-//         url: "https://openlibrary.org/subjects/list.json",
-//         type: "GET",
-//         success: function(data) {
-//             console.log(data.works);
-//             return data;
-//         },
-//         error: function(error) {
-//             console.log(error);
-//         }
-//     });
-// }
-
-// Create list of subjects
-// createSubjectsList = () => {
-//     subjectList = document.getElementById('subjects-list');
-//     subjects();
-
-// }
-
 // Load books of the main screen
 const setUp = async() => {
     // await createSubjectsList();
