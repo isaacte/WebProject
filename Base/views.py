@@ -9,7 +9,7 @@ from django.views import View
 from .models import Book, Author, BookInUserLibrary
 from django.shortcuts import get_object_or_404
 import requests
-from .utils import  get_book
+from .utils import get_book
 
 def register(request : HttpRequest):
     if request.method == 'POST':
@@ -24,6 +24,9 @@ def register(request : HttpRequest):
 
 def index(request):
     return render(request, 'Base/index.html')
+
+def my_books(request):
+    return render(request, 'Base/my_books.html')
 
 def author(request, author_id):
     a = get_object_or_404(Author, id = author_id)

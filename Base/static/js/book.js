@@ -1,7 +1,7 @@
 // Return a list of books from a json object. Return null if there aren't any book.
 const getBook = async() => {
     try {
-        const response = await fetch(`../api/books/${bookIsbn}`);
+        const response = await fetch(`../api/books/${openlibrary_key}`);
         const data = await response.json();
         return data;
     } catch (error) {
@@ -53,9 +53,21 @@ removeBookButton = document.getElementById("remove-book-button");
 
 added = false;
 
+const addBook = async(book_id) => {
+    const response = await fetch(url, {
+        method: 'PUT',
+        headers: {
+          'Content-type': '../api/'
+        },
+        body: JSON.stringify(book_id)
+      });
+}
+
 // Add book in the user's list
 readButton.addEventListener('click', () => {
     if (!added) {
+        addBook(book_id);
+
         readButton.classList.remove("btn-primary");
         readButton.classList.add("btn-success");
         readButton.setAttribute('data-bs-toggle', 'modal');
