@@ -6,7 +6,7 @@ from statistics import mean
 
 # Create your models here.
 class Author(models.Model):
-    openlibrary_key = models.CharField(max_length=20, unique=True)
+    openlibrary_key = models.CharField(max_length=20, primary_key=True)
     name = models.CharField(max_length=32)
     biography = models.TextField()
     birth_date = models.DateField()
@@ -36,8 +36,8 @@ class Language(models.Model):
         return f"{self.code - self.name}"
 
 class Book(models.Model):
-    ISBN = models.CharField(max_length=13, primary_key=True)
-    openlibrary_key = models.CharField(max_length=15, unique=True)
+    openlibrary_key = models.CharField(max_length=15, primary_key=True)
+    ISBN = models.CharField(max_length=13)
     title = models.CharField(max_length=32)
     publish_date = models.DateField()
     pages_number = models.PositiveIntegerField()
@@ -81,5 +81,12 @@ class Review(models.Model):
     def __unicode__(self):
         return f"{self.book.title} - {self.user}"
     
+    class Meta:
+        unique_together = ("book", "user")
+
+class BookInUserLibrary(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    book = models.ForeignKey(Book, on_delete=models.CASCADE)
+
     class Meta:
         unique_together = ("book", "user")
