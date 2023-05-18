@@ -56,8 +56,8 @@ const getAuthorsString = (book, maxAuthors = -1) => {
 
 // Return the html of a book card from a book object
 const getBookCard = (book, authors) => {
-    if (book["image"] == null) {
-        
+    if (book["image"] == null){
+        cover = "../image/NoCover.jpeg";
     } else {
         cover = book["image"];
     }
