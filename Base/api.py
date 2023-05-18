@@ -11,8 +11,7 @@ class BookViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.AllowAny]
     serializer_class = BookSerializer
     filter_backends = [filters.OrderingFilter]
-    ordering_fields = ['openlibrary_key', 'title', 'summary', 'image', 'addition_date', 'qualification_avg']
-    ordering = ['addition_date']
+    ordering_fields = ['openlibrary_key', 'title', 'summary', 'image', 'qualification_avg']
 
     def get_ordering(self):
         ordering = self.request.query_params.get('ordering', 'addition_date')

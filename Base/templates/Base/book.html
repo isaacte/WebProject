@@ -38,18 +38,11 @@
                   <tr>
                     <th scope="row">Authors</th>
                     <td id="authors-field"></td>
-                  </tr>
-                  <tr>
-                    <th scope="row">Pages</th>
-                    <td>{{ book.pages_number }}</td>
-                  </tr>
-                  <tr>
-                    <th scope="row">Publish date</th>
-                    <td colspan="2">{{ book.publish_date }}</td>
-                  </tr>
-                  <tr>
-                    <th scope="row">Edition</th>
-                    <td colspan="2">{{ book.edition }}</td>
+                      <ul>
+                          {% for author in authors %}
+                              <li><a href="{% url 'author'  author.author.openlibrary_key%}">{{ author.author.name }}</a></li>
+                          {% endfor %}
+                      </ul>
                   </tr>
                 </tbody>
               </table>

@@ -5,7 +5,7 @@ class BookSerializer(serializers.ModelSerializer):
     authors = serializers.SerializerMethodField()
     class Meta:
         model = Book
-        fields = ('openlibrary_key', 'ISBN', 'title', 'publish_date', 'pages_number', 'summary', 'edition', 'image', 'language', 'authors', 'qualification', 'addition_date')
+        fields = ('openlibrary_key', 'title', 'summary', 'image', 'authors', 'qualification')
     
     def get_authors(self, obj):
         authors = []

@@ -1,5 +1,5 @@
 import requests
-from .models import Book, Author
+from .models import Book, Author, AuthorInBook
 from django.core.files.base import ContentFile
 from PIL import Image
 from io import BytesIO
@@ -9,11 +9,11 @@ import re
 def get_book(openlibrary_key):
     if Book.objects.filter(openlibrary_key=openlibrary_key).exists():
         return Book.objects.get(openlibrary_key=openlibrary_key)
-    result = requests.get(f'https://openlibrary.org/work/{openlibrary_key}.json')
+    result = requests.get(f'https://openlibrary.org/works/{openlibrary_key}.json')
     if result.status_code != 200:
         return None
     result = result.json()
-    b = Book(openlibrary_key = result['key'],
+    b = Book(openlibrary_key = openlibrary_key,
                                title = result['title'])
     if 'description' in result:
         b.summary = result['description']
@@ -23,8 +23,9 @@ def get_book(openlibrary_key):
         b.image.save(f'{result["covers"][0]}.jpg', image_data)
     b.save()
     for author in result['authors']:
-        key = re.search(r'/author/([^/]+)', author["author"]["key"]).group(1)
-        get_author(key)
+        key = re.search(r"/authors/(\w+)", author["author"]["key"]).group(1)
+        a = get_author(key)
+        AuthorInBook.objects.create(book=b, author=a)
     return b
 
 def get_author(openlibrary_key):
@@ -46,9 +47,9 @@ def get_author(openlibrary_key):
     if 'bio' in result:
         a.biography = result['bio']
     if 'birth_date' in result:
-        a.birth_date = datetime.strftime(result['birth_date'], "%d %B %Y")
+        a.birth_date = datetime.strptime(result['birth_date'], "%d %B %Y")
     if 'death_date' in result:
-        a.decease_date = datetime.strftime(result['death_date'], "%d %B %Y")
+        a.decease_date = datetime.strptime(result['death_date'], "%d %B %Y")
     a.save()
 
     return a
