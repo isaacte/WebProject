@@ -2,7 +2,7 @@ from rest_framework import viewsets, permissions, mixins, filters, generics
 from rest_framework.response import Response
 
 from .models import Book, AuthorInBook, Author
-from .serializers import BookSerializer, AuthorInBookSerializer, AuthorSerializer, SearchBookSerializer
+from .serializers import BookSerializer, AuthorInBookSerializer, AuthorSerializer
 from django.db.models import Avg, F
 import requests
 
