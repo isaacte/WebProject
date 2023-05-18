@@ -52,6 +52,16 @@
                           {% endfor %}
                       </ul>
                   </tr>
+                  <tr>
+                    <th scope="row">Genres</th>
+                    <td id="authors-field"></td>
+                      <ul>
+                          {% for genre in genres %}
+                              <li><a href="{% url 'subject'  genre.literary_genre.name %}">{{ genre.literary_genre.name }}</a></li>
+                          {% endfor %}
+                      </ul>
+                  </tr>
+
                 </tbody>
               </table>
         </div>

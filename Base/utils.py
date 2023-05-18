@@ -1,5 +1,5 @@
 import requests
-from .models import Book, Author, AuthorInBook
+from .models import Book, Author, AuthorInBook, LiteraryGenre, LiteraryGenreInBook
 from django.core.files.base import ContentFile
 from PIL import Image
 from io import BytesIO
@@ -26,6 +26,10 @@ def get_book(openlibrary_key):
         key = re.search(r"/authors/(\w+)", author["author"]["key"]).group(1)
         a = get_author(key)
         AuthorInBook.objects.create(book=b, author=a)
+
+    for genre in result['subjects']:
+        genre_obj = LiteraryGenre.objects.get_or_create(name=genre)
+        LiteraryGenreInBook.objects.create(genre=genre_obj, book=b)
     return b
 
 def get_author(openlibrary_key):
