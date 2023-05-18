@@ -56,18 +56,24 @@ const getAuthorsString = (book, maxAuthors = -1) => {
 
 // Return the html of a book card from a book object
 const getBookCard = (book, authors) => {
-    if (book["image"] == null){
+    if (book["image"] == null) {
         
     } else {
         cover = book["image"];
     }
+    if (book["summary"] == null) {
+        summary = "There aren't any summary for this book :(";
+    } else {
+        summary = book["summary"];
+    }
+
     return `<div class="col-sm-6 col-md-4 col-lg-2">
-    <a class="book-card link-underline link-underline-opacity-0 text-dark" href="./book/${book["ISBN"]}">
+    <a class="book-card link-underline link-underline-opacity-0 text-dark" href="./book/${book["openlibrary-key"]}">
         <div class="card mb-3">
-           <img src="${book["image"]}" class="card-img-top" alt="Book cover of '${book["title"]}'">
+           <img src="${cover}" class="card-img-top" alt="Book cover of '${book["title"]}'">
            <div class="card-body">
                 <h5 class="card-title">${book["title"]}</h5>
-                <p class="card-text">${book["summary"]}</p>
+                <p class="card-text">${summary}</p>
                 <p class="card-text"><small class="text-body-secondary">${authors}</small></p>
            </div>
         </div>
