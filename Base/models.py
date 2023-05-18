@@ -59,13 +59,6 @@ class AuthorInBook(models.Model):
     class Meta:
         unique_together = ("book", "author")
 
-class LiteraryGenreInBook(models.Model):
-    literary_genre = models.ForeignKey(LiteraryGenre, on_delete=models.CASCADE)
-    book = models.ForeignKey(Book, on_delete=models.CASCADE)
-
-    def __unicode__(self):
-        return f"{self.book.title} - {self.literary_genre.name}"
-
 class Review(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     book = models.ForeignKey(Book, on_delete=models.CASCADE)
