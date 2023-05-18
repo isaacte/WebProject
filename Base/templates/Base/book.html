@@ -6,7 +6,15 @@
     <h1>{{ book.title }}</h1>
     <div class="row">
         <div class="col-sm-12 col-md-6 col-lg-4 my-2">
+          <script>
+            let hola = '{{ book.image }}';
+            console.log(hola);
+        </script>
+          {% if book.image == "" %}
+            <img class="img-fluid" src="../../static/images/NoCover.jpeg">
+          {% else %}
             <img class="img-fluid" src="{{ book.image.url }}">
+          {% endif %}
             <div class="d-grid gap-2">
                 <!-- <button type="button" id="read-button" class="btn btn-primary my-2">Mark as read</button> -->
 
