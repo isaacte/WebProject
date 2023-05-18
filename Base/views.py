@@ -34,7 +34,8 @@ def book(request, key):
     if not b:
         return HttpResponseNotFound("Book not found.")
     a = b.authorinbook_set.all()
-    return render(request, 'Base/book.html', {'book': b, 'authors': a})
+    g = b.literarygenreinbook_set.all()
+    return render(request, 'Base/book.html', {'book': b, 'authors': a, 'genres': g})
 
 def search_book(request, query):
     result = requests.get(f'https://openlibrary.org/search.json?q={query}')
