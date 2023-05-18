@@ -9,7 +9,7 @@ from django.views import View
 from .models import Book, Author, LiteraryGenre, BookInUserLibrary
 from django.shortcuts import get_object_or_404
 import requests
-from .utils import  get_book
+from .utils import get_book
 
 def register(request : HttpRequest):
     if request.method == 'POST':

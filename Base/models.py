@@ -24,12 +24,7 @@ class LiteraryGenre(models.Model):
 
 
 class Book(models.Model):
-<<<<<<< HEAD
-    openlibrary_book_key = models.CharField(max_length=15, primary_key=True)
-    ISBN = models.CharField(max_length=13)
-=======
     openlibrary_key = models.CharField(max_length=15, primary_key=True)
->>>>>>> f76e243481136f506f94d8519101d736dd792e84
     title = models.CharField(max_length=32)
     summary = models.TextField(blank=True, null=True)
     image = models.ImageField(blank=True, null=True)
@@ -63,13 +58,6 @@ class AuthorInBook(models.Model):
 
     class Meta:
         unique_together = ("book", "author")
-
-class LiteraryGenreInBook(models.Model):
-    literary_genre = models.ForeignKey(LiteraryGenre, on_delete=models.CASCADE)
-    book = models.ForeignKey(Book, on_delete=models.CASCADE)
-
-    def __unicode__(self):
-        return f"{self.book.title} - {self.literary_genre.name}"
 
 class Review(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)

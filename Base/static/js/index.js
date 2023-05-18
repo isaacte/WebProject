@@ -2,27 +2,24 @@
 MAX_WRITERS_SHOWED = 2;
 
 // Return a list of books from a json object. Return null if there aren't any book.
-const listBooks = async() => {
-    // try {
-    //     const response = await fetch("./api/books");
-    //     const data = await response.json();
-    //     if (data.length == 0) {
-    //         return null;
-    //     } else {
-    //         return data;
-    //     }
-    // } catch (error) {
-    //     console.log(error);
-    // }
-
+const listBooks = () => {
     $.ajax({
         url: "./api/books",
         type: "GET",
         success: function(data) {
-            if (data.length == 0) {
-                return null;
+            books = data.results;
+            if (books.length == 0) {
+                console.log("There aren't books");
             } else {
-                return data;
+                var bestRatedBooks = document.getElementById("best-rated-books");
+                var html = "";
+                
+                // Add info to HTML
+                for (const i in books) {
+                    var authors = getAuthorsString(books[i], MAX_WRITERS_SHOWED);
+                    html += getBookCard(books[i], authors);
+                }
+                bestRatedBooks.innerHTML = html;
             }
         },
         error: function(error) {
@@ -59,6 +56,11 @@ const getAuthorsString = (book, maxAuthors = -1) => {
 
 // Return the html of a book card from a book object
 const getBookCard = (book, authors) => {
+    if (book["image"] == null){
+        
+    } else {
+        cover = book["image"];
+    }
     return `<div class="col-sm-6 col-md-4 col-lg-2">
     <a class="book-card link-underline link-underline-opacity-0 text-dark" href="./book/${book["ISBN"]}">
         <div class="card mb-3">
@@ -74,24 +76,11 @@ const getBookCard = (book, authors) => {
 }
 
 // Load books of the main screen
-const setUp = async() => {
+const setUp = () => {
     // await createSubjectsList();
     books = listBooks();
-    if (books == null) {
-        console.log("There aren't books");
-    } else {
-        var bestRatedBooks = document.getElementById("best-rated-books");
-        var html = "";
-        
-        // Add info to HTML
-        for (const i in books) {
-            var authors = getAuthorsString(books[i], MAX_WRITERS_SHOWED);
-            html += getBookCard(books[i], authors);
-        }
-        bestRatedBooks.innerHTML = html;
-    }
 }
 
-window.addEventListener("load", async () => {
-    await setUp();
+window.addEventListener("load", () => {
+    setUp();
 });
