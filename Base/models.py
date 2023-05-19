@@ -24,9 +24,11 @@ class LiteraryGenre(models.Model):
 
 
 class Book(models.Model):
-    openlibrary_key = models.CharField(max_length=15, primary_key=True)
-    title = models.CharField(max_length=128)
-    summary = models.TextField(blank=True, null=True)
+    openlibrary_key = models.CharField(max_length=20, primary_key=True)
+    name = models.CharField(max_length=128)
+    biography = models.TextField(blank=True, null=True)
+    birth_date = models.DateField(blank=True, null=True)
+    decease_date = models.DateField(blank=True, null=True)
     image = models.ImageField(blank=True, null=True)
 
     def __unicode__(self):
