@@ -9,6 +9,8 @@ const getBook = async() => {
     // }
 }
 
+let thisBook = null;
+
 // Return the names of the book's authors
 const getAuthorsString = (book) => {
     authors = book.authors;
@@ -39,6 +41,7 @@ const setUp = async() => {
         url: `./api/books/${openlibrary_key}`,
         type: "GET",
         success: function(book) {
+            thisBook = book;
             authorsField = document.getElementById("authors-field");
             var html = "";
                 
@@ -63,29 +66,21 @@ removeBookButton = document.getElementById("remove-book-button");
 
 added = false;
 
-const addBook = async(book_id) => {
-    const response = await fetch(url, {
-        method: 'PUT',
-        headers: {
-          'Content-type': '../api/'
-        },
-        body: JSON.stringify(book_id)
-      });
-}
-
 // Add book in the user's list
 readButton.addEventListener('click', async() => {
+    book = getBook(openlibrary_key);
     console.log(`./api/books/${openlibrary_key}`);
     if (!added) {
         $.ajax({
-            url: `../../api/books/${openlibrary_key}`,
-            type: "GET",
-            success: function(book) {
-                console.log(book);
-                addBook(openlibrary_key);
+            url: `/save_book`,
+            type: "POST",
+            dataType: "json",
+            data: JSON.stringify(thisBook),
+            success: function(response) {
+                console.log(response);
             },
             error: function(error) {
-                console.log(error);
+                console.log(`ERROR: ${error}`);
             }
         });
         

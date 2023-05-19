@@ -50,7 +50,7 @@ def subject(request, sub):
 def save_book(request):
     if request.method != 'POST':
         return HttpResponseBadRequest(f"Method not allowed.", status=405)
-    b = get_book(request.POST.get('book_id'))
+    b = get_book(request.POST.get('openlibrary_key'))
     if b:
         if not BookInUserLibrary.objects.filter(book = b, user = request.user).exists():
             BookInUserLibrary.objects.create(book = b, user=request.user)
