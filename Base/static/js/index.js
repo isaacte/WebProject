@@ -13,7 +13,6 @@ const listBooks = () => {
             } else {
                 var bestRatedBooks = document.getElementById("best-rated-books");
                 var html = "";
-                
                 // Add info to HTML
                 for (const i in books) {
                     var authors = getAuthorsString(books[i], MAX_WRITERS_SHOWED);
@@ -50,7 +49,7 @@ const getAuthorsString = (book, maxAuthors = -1) => {
             authorsString += ' and others';
         }
     }
-    
+
     return authorsString;
 }
 
@@ -88,7 +87,7 @@ const getBookCard = (book, authors) => {
 
 // Load books of the main screen
 const setUp = () => {
-    books = listBooks();    
+    books = listBooks();
 }
 
 window.addEventListener("load", () => {
