@@ -7,7 +7,7 @@ from statistics import mean
 # Create your models here.
 class Author(models.Model):
     openlibrary_key = models.CharField(max_length=20, primary_key=True)
-    name = models.CharField(max_length=32)
+    name = models.CharField(max_length=128)
     biography = models.TextField(blank=True, null=True)
     birth_date = models.DateField(blank=True, null=True)
     decease_date = models.DateField(blank=True, null=True)
@@ -17,16 +17,18 @@ class Author(models.Model):
         return self.name
 
 class LiteraryGenre(models.Model):
-    name = models.CharField(max_length=32, unique=True)
+    name = models.CharField(max_length=128, unique=True)
 
     def __unicode__(self):
         return self.name
 
 
 class Book(models.Model):
-    openlibrary_key = models.CharField(max_length=15, primary_key=True)
-    title = models.CharField(max_length=32)
-    summary = models.TextField(blank=True, null=True)
+    openlibrary_key = models.CharField(max_length=20, primary_key=True)
+    name = models.CharField(max_length=128)
+    biography = models.TextField(blank=True, null=True)
+    birth_date = models.DateField(blank=True, null=True)
+    decease_date = models.DateField(blank=True, null=True)
     image = models.ImageField(blank=True, null=True)
 
     def __unicode__(self):
@@ -58,7 +60,6 @@ class AuthorInBook(models.Model):
 
     class Meta:
         unique_together = ("book", "author")
-
 
 class Review(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
