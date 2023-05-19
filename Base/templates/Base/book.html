@@ -38,35 +38,91 @@
             </div>
 
             <table class="table">
-              <tbody>
-                <tr>
-                  <th scope="col">Authors</th>
-                  <td id="authors-field">
-                  {% if authors %}
-                    {% for author in authors %}
-                      <a class="link-secondary" href="{% url 'author' author_id=author.author.openlibrary_key %}">{{ author.author.name }}</a>{% if not forloop.last %}, {% endif %}
-                    {% endfor %}
-                  {% else %}
-                      No authors
-                  {% endif %}
-                  </td>
-                </tr>
-                {% if genres %}
-                <tr>
-                  <th scope="row">Genres</th>
-                  <td id="genres-field">
-                    {% for genre in genres %}
-                      <a class="link-secondary" href="{% url 'subject' sub=genre.literary_genre.name %}">{{ genre.literary_genre.name }}</a>{% if not forloop.last %}, {% endif %}
-                    {% endfor %}
-                  </td>
-                </tr>
-                {% endif %}
-              </tbody>
+                <tbody>
+                    <tr>
+                        <th scope="col">Authors</th>
+                        <td id="authors-field">
+                            {% if authors %}
+                                {% for author in authors %}
+                                <a class="link-secondary" href="{% url 'author' author_id=author.author.openlibrary_key %}">{{ author.author.name }}</a>{% if not forloop.last %}, {% endif %}
+                                {% endfor %}
+                            {% else %}
+                                No authors
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% if genres %}
+                    <tr>
+                        <th scope="row">Genres</th>
+                        <td id="genres-field">
+                            {% for genre in genres %}
+                                <a class="link-secondary" href="{% url 'subject' sub=genre.literary_genre.name %}">{{ genre.literary_genre.name }}</a>{% if not forloop.last %}, {% endif %}
+                            {% endfor %}
+                        </td>
+                    </tr>
+                    {% endif %}
+                </tbody>
             </table>
         </div>
         <div class="col-sm-12 col-md-6 col-lg-8 my-2">
             <h2>Summary</h2>
+            <hr class="review-separator">
             <p>{% if book.summary %}{{ book.summary }}{% else %}We are sorry, at the moment, this book does not have summary.{% endif %}</p>
+            <!-- Nuevo apartado para mostrar las reviews -->
+            <div>
+                <h2>Reviews</h2>
+                <hr class="review-separator">
+                <h4>Leave a Review</h4>
+                {% if user.is_authenticated %}
+                    <form class="form-control" method="post" action="{% url 'create_review' book.openlibrary_key %}">
+                        {% csrf_token %}
+                        {% if form.errors %}
+                            <div class="alert alert-danger">
+                                <strong>Error:</strong> Please correct the following errors.
+                                <ul>
+                                    {% for field, errors in form.errors.items %}
+                                        {% for error in errors %}
+                                            <li>{{ error }}</li>
+                                        {% endfor %}
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        {% endif %}
+                        <div class="form-group mb-3">
+                            <label for="qualification" class="col-form-label">{{ form.qualification.label_tag }}:</label>
+                            {{ form.qualification }}
+                        </div>
+                        <div class="form-group mb-3 row">
+                            <label for="comment" class="col-form-label">{{ form.comment.label_tag }}</label>
+                            {{ form.comment }}
+                        </div>
+                        <button type="submit" class="btn btn-primary">Comment</button>
+                    </form>
+                {% else %}
+                    <p>Please <a href="{% url 'register' %}">register</a> or <a href="{% url 'login' %}">log in</a> to leave a review.</p>
+                {% endif %}
+                <hr class="review-separator">
+                {% if reviews %}
+                    <div class="review-list">
+                        {% for review in reviews %}
+                            <div class="review">
+                                <div class="review-header">
+                                    <div class="review-info">{{ review.user }} - {{review.date}}</div>
+                                    <div class="review-rating"> 
+                                        {% for _ in "x"|rjust:review.qualification|make_list %}
+                                            <i class="fas fa-star"></i>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                                <div class="review-comment">{{ review.comment }}</div>
+                                <hr class="review-separator">
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <p>No reviews available for this book.</p>
+                {% endif %}
+            </div>
         </div>
     </div>
 {% endblock %}
