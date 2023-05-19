@@ -3,7 +3,7 @@ from django.contrib.auth import login, authenticate
 from django.http.response import JsonResponse
 from Base.forms import RegisterForm
 from django.http import HttpRequest, HttpResponseBadRequest, HttpResponseNotFound
-from .models import Author, BookInUserLibrary
+from .models import Author, BookInUserLibrary, Review
 from django.shortcuts import get_object_or_404
 import requests
 from .utils import get_book
@@ -35,7 +35,8 @@ def book(request, key):
         return HttpResponseNotFound("Book not found.")
     a = b.authorinbook_set.all()
     g = b.literarygenreinbook_set.all()
-    return render(request, 'Base/book.html', {'book': b, 'authors': a, 'genres': g})
+    r = Review.objects.filter(book = b)
+    return render(request, 'Base/book.html', {'book': b, 'authors': a, 'genres': g, 'reviews': r})
 
 def search_book(request, query):
     result = requests.get(f'https://openlibrary.org/search.json?q={query}')
