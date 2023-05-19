@@ -61,6 +61,7 @@ const getBookCard = (book, authors) => {
         cover = "../../static/images/NoCover.jpeg";
     } else {
         cover = book["image"];
+        console.log(cover);
     }
     if (book["summary"] == null) {
         summary = "There aren't any summary for this book :(";

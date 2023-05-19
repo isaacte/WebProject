@@ -1,12 +1,12 @@
 // Return a list of books from a json object. Return null if there aren't any book.
 const getBook = async() => {
-    try {
-        const response = await fetch(`../api/books/${openlibrary_key}`);
-        const data = await response.json();
-        return data;
-    } catch (error) {
-        console.log(error);
-    }
+    // try {
+    //     const response = await fetch(`../api/books/${openlibrary_key}`);
+    //     const data = await response.json();
+    //     return data;
+    // } catch (error) {
+    //     console.log(error);
+    // }
 }
 
 // Return the names of the book's authors
@@ -34,17 +34,27 @@ const getAuthorsString = (book) => {
 
 // Load books of the main screen
 const setUp = async() => {
-    book = await getBook();
-    authorsField = document.getElementById("authors-field");
-    var html = "";
-        
-    // Add info to HTML
-    html = getAuthorsString(book);
-    authorsField.innerHTML = html;
+    // book = await getBook();
+    $.ajax({
+        url: `./api/books/${openlibrary_key}`,
+        type: "GET",
+        success: function(book) {
+            authorsField = document.getElementById("authors-field");
+            var html = "";
+                
+            // Add info to HTML
+            html = getAuthorsString(book);
+            authorsField.innerHTML = html;
+            
+        },
+        error: function(error) {
+            console.log(error);
+        }
+    });
 }
 
 window.addEventListener("load", async () => {
-    console.log(bookIsbn);
+    console.log(`${book}`);
     await setUp();
 });
 
@@ -64,10 +74,21 @@ const addBook = async(book_id) => {
 }
 
 // Add book in the user's list
-readButton.addEventListener('click', () => {
+readButton.addEventListener('click', async() => {
+    console.log(`./api/books/${OLbook}`);
     if (!added) {
-        addBook(book_id);
-
+        $.ajax({
+            url: `../../api/books/${OLbook}`,
+            type: "GET",
+            success: function(book) {
+                console.log(book);
+                addBook(openlibrary_key);
+            },
+            error: function(error) {
+                console.log(error);
+            }
+        });
+        
         readButton.classList.remove("btn-primary");
         readButton.classList.add("btn-success");
         readButton.setAttribute('data-bs-toggle', 'modal');
