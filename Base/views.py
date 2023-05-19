@@ -20,7 +20,8 @@ def register(request : HttpRequest):
     return render(request, 'registration/register.html', {'form': form})
 
 def index(request):
-    return render(request, 'Base/index.html')
+    themes = LiteraryGenre.objects.all()
+    return render(request, 'Base/index.html', {'themes': themes})
 
 def author(request, author_id):
     a = get_object_or_404(Author, openlibrary_key = author_id)
