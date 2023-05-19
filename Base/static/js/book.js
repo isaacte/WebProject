@@ -75,10 +75,10 @@ const addBook = async(book_id) => {
 
 // Add book in the user's list
 readButton.addEventListener('click', async() => {
-    console.log(`./api/books/${OLbook}`);
+    console.log(`./api/books/${openlibrary_key}`);
     if (!added) {
         $.ajax({
-            url: `../../api/books/${OLbook}`,
+            url: `../../api/books/${openlibrary_key}`,
             type: "GET",
             success: function(book) {
                 console.log(book);
