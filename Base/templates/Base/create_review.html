@@ -1,0 +1,28 @@
+{% extends "Base/book.html" %}
+
+{% block review_form %}
+    <form class="form-control" method="post" action="{% url 'create_review' book.openlibrary_key %}">
+        {% csrf_token %}
+        {% if form.errors %}
+            <div class="alert alert-danger">
+                <strong>Error:</strong> Please correct the following errors.
+                <ul>
+                    {% for field, errors in form.errors.items %}
+                        {% for error in errors %}
+                            <li>{{ field }}: {{ error }}</li>
+                        {% endfor %}
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+        <div class="form-group mb-3">
+            <label for="qualification" class="col-form-label">{{ form.qualification.label_tag }}:</label>
+            {{ form.qualification }}
+        </div>
+        <div class="form-group mb-3 row">
+            <label for="comment" class="col-form-label">{{ form.comment.label_tag }}</label>
+            {{ form.comment }}
+        </div>
+        <button type="submit" class="btn btn-primary">Publish</button>
+    </form>
+{% endblock %}

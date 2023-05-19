@@ -38,22 +38,53 @@ def book(request, book_id):
     a = b.authorinbook_set.all()
     g = b.literarygenreinbook_set.all()
     r = Review.objects.filter(book = b)
-    form = ReviewForm()
-    return render(request, 'Base/book.html', {'book': b, 'authors': a, 'genres': g, 'reviews': r, 'form': form})
+    ur = Review.objects.filter(user = request.user, book = b).exists()
+    return render(request, 'Base/book.html', {'book': b, 'authors': a, 'genres': g, 'reviews': r, 'user_review_exists': ur})
 
 @login_required
 def create_review(request, book_id):
-    if request.method != 'POST':
-        return HttpResponseBadRequest(f"Method not allowed.", status=405)
-    form = ReviewForm(request.POST)
-    if form.is_valid():
-        review = form.save(commit=False)
-        review.user = request.user
-        review.book = get_book(book_id)
-        review.save()
-        return redirect('book', book_id=book_id)
-    form = ReviewForm()
-    return redirect('book', book_id=book_id)
+    b = get_book(book_id)
+    if not b:
+        return HttpResponseNotFound("Book not found.")
+    a = b.authorinbook_set.all()
+    g = b.literarygenreinbook_set.all()
+    r = Review.objects.filter(book = b)
+    if request.method == 'POST':
+        form = ReviewForm(request.POST)
+        if form.is_valid():
+            review = form.save(commit=False)
+            review.user = request.user
+            review.book = b
+            review.save()
+            return redirect('book', book_id)
+    else:
+        form = ReviewForm()
+    return render(request, 'Base/create_review.html', {'book': b, 'authors': a, 'genres': g, 'reviews': r, 'form': form})
+
+@login_required
+def edit_review(request, book_id):
+    b = get_book(book_id)
+    if not b:
+        return HttpResponseNotFound("Book not found.")
+    a = b.authorinbook_set.all()
+    g = b.literarygenreinbook_set.all()
+    r = Review.objects.filter(book = b)
+    ur = Review.objects.get(user = request.user, book = b)
+    if request.method == 'POST':
+        form = ReviewForm(request.POST, instance=ur)
+        if form.is_valid():
+            form.save()
+            return redirect('book', book_id)
+    else:
+        form = ReviewForm(instance = ur)
+    return render(request, 'Base/edit_review.html', {'book': b, 'authors': a, 'genres': g, 'reviews': r, 'form': form})
+
+@login_required
+def delete_review(request, book_id):
+    b = get_book(book_id)
+    ur = get_object_or_404(Review, book = b, user=request.user)
+    ur.delete()
+    return redirect('book', book_id = book_id)
 
 def search_book(request, query):
     result = requests.get(f'https://openlibrary.org/search.json?q={query}')

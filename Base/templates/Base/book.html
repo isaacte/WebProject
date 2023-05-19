@@ -74,30 +74,15 @@
                 <hr class="review-separator">
                 <h4>Leave a Review</h4>
                 {% if user.is_authenticated %}
-                    <form class="form-control" method="post" action="{% url 'create_review' book.openlibrary_key %}">
-                        {% csrf_token %}
-                        {% if form.errors %}
-                            <div class="alert alert-danger">
-                                <strong>Error:</strong> Please correct the following errors.
-                                <ul>
-                                    {% for field, errors in form.errors.items %}
-                                        {% for error in errors %}
-                                            <li>{{ error }}</li>
-                                        {% endfor %}
-                                    {% endfor %}
-                                </ul>
-                            </div>
+                    {% block review_form %}
+                        {% if not user_review_exists %}
+                            <a href="{% url 'create_review' book.openlibrary_key %}" class="btn btn-primary">Write a review</a>
+                        {% else %}
+                            <p>Yoy have already reviewed this book:</p>
+                            <a href="{% url 'edit_review' book.openlibrary_key %}" class="btn btn-primary">Edit review</a>
+                            <a href="{% url 'delete_review' book.openlibrary_key %}" class="btn btn-danger">Delete review</a>
                         {% endif %}
-                        <div class="form-group mb-3">
-                            <label for="qualification" class="col-form-label">{{ form.qualification.label_tag }}:</label>
-                            {{ form.qualification }}
-                        </div>
-                        <div class="form-group mb-3 row">
-                            <label for="comment" class="col-form-label">{{ form.comment.label_tag }}</label>
-                            {{ form.comment }}
-                        </div>
-                        <button type="submit" class="btn btn-primary">Comment</button>
-                    </form>
+                    {% endblock %}
                 {% else %}
                     <p>Please <a href="{% url 'register' %}">register</a> or <a href="{% url 'login' %}">log in</a> to leave a review.</p>
                 {% endif %}
@@ -115,6 +100,12 @@
                                     </div>
                                 </div>
                                 <div class="review-comment">{{ review.comment }}</div>
+                                {% if user.is_authenticated and user == review.user %}
+                                    <div class="review-actions">
+                                        <a href="{% url 'edit_review' book.openlibrary_key %}" class="btn btn-primary">Edit</a>
+                                        <a href="{% url 'delete_review' book.openlibrary_key %}" class="btn btn-danger">Delete</a>
+                                    </div>
+                                {% endif %}
                                 <hr class="review-separator">
                             </div>
                         {% endfor %}
