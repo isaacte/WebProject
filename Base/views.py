@@ -1,12 +1,9 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate
 from django.http.response import JsonResponse
-from django.urls import reverse
-from django.http import HttpResponseRedirect
 from Base.forms import RegisterForm
 from django.http import HttpRequest, HttpResponseBadRequest, HttpResponseNotFound
-from django.views import View
-from .models import Book, Author, BookInUserLibrary
+from .models import Author, BookInUserLibrary
 from django.shortcuts import get_object_or_404
 import requests
 from .utils import get_book

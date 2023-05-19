@@ -1,13 +1,12 @@
 const regex = /\/works\/(\w+)/;
 function handleClick(event){
-    console.log(event.target)
-    window.open(`/book/${event.target.closest('.book-content').getAttribute('book_id')}`, '_blank').focus();
-
+    window.location.href = `/book/${event.target.closest('.book-content').getAttribute('book_id')}`;
 }
 
+let cleanSubject = subject.replace(/ /g, '_').toLowerCase();
 $(document).ready(function() {
   $.ajax({
-    url: `https://openlibrary.org/subjects/${subject}.json?offset=0&limit=50`,
+    url: `https://openlibrary.org/subjects/${cleanSubject}.json?offset=0&limit=50`,
     method: 'GET',
     success: function(data) {
       let bookCards = document.getElementsByClassName('book-content');
@@ -26,7 +25,14 @@ $(document).ready(function() {
           parent.querySelector('[role="title"]').innerText = data['works'][i]['title']
           let authors = "";
           for (let author in data['works'][i]['authors']){
-            authors += data['works'][i]['authors'][author]["name"] + "\n";
+              if (author > 2){
+                  authors += "..." + "\n";
+                  break;
+              }
+            authors += data['works'][i]['authors'][author]["name"];
+              if (author + 1 < data['works'][i]['authors'].length){
+                  authors += ", "
+              }
           }
           parent.querySelector('[role="authors"]').innerHTML = authors
       }
@@ -39,11 +45,11 @@ $(document).ready(function() {
 let offset = 50;
 let loading = false;
 window.onscroll = function(ev) {
-        if ((window.innerHeight + Math.round(window.scrollY)) >= document.body.offsetHeight && !loading) {
+        if ((window.innerHeight + Math.round(window.scrollY)) + 100 >= document.body.offsetHeight && !loading) {
                 console.log('load')
                 loading = true
                 $.ajax({
-                    url: `https://openlibrary.org/subjects/${subject}.json?offset=${offset}&limit=50`,
+                    url: `https://openlibrary.org/subjects/${cleanSubject}.json?offset=${offset}&limit=50`,
                     method: 'GET',
                     success: function (data) {
                         let parent = document.getElementById('books-container');

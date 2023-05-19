@@ -1,6 +1,6 @@
 {% extends "Base/base.html" %}
 
-{% block title %}Index{% endblock %}
+{% block title %}{{ book.title }}{% endblock %}
 
 {% block content %}
     <h1>{{ book.title }}</h1>
@@ -42,22 +42,36 @@
             </div>
 
             <table class="table">
-                <tbody>
-                    <th scope="row">Authors</th>
-                    <tr>
-                        <td id="authors-field">
-                        <ul>
-                            {% for author in authors %}
-                                <li><a href="{% url 'author'  author.author.openlibrary_key%}">{{ author.author.name }}</a></li>
-                            {% endfor %}
-                        </ul>
-                        </td>
-                    </tr>
-                </tbody>
+              <tbody>
+                <tr>
+                  <th scope="row">Authors</th>
+                  <td id="authors-field">
+                  {% if authors %}
+                    {% for author in authors %}
+                      <a class="link-secondary" href="{% url 'author' author_id=author.author.openlibrary_key %}">{{ author.author.name }}</a>{% if not forloop.last %}, {% endif %}
+                    {% endfor %}
+                  {% else %}
+                      No authors
+                  {% endif %}
+                  </td>
+                </tr>
+                {% if genres %}
+                <tr>
+                  <th scope="row">Genres</th>
+                  <td id="genres-field">
+                    {% for genre in genres %}
+                      <a class="link-secondary" href="{% url 'subject' sub=genre.literary_genre.name %}">{{ genre.literary_genre.name }}</a>{% if not forloop.last %}, {% endif %}
+                    {% endfor %}
+                  </td>
+                </tr>
+                {% endif %}
+              </tbody>
             </table>
+
         </div>
         <div class="col-sm-12 col-md-6 col-lg-8 my-2">
-            <p>{{ book.summary }}</p>
+            <h2>Summary</h2>
+            <p>{% if book.summary %}{{ book.summary }}{% else %}We are sorry, at the moment, this book does not have summary.{% endif %}</p>
         </div>
     </div>
 {% endblock %}
