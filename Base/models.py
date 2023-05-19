@@ -7,45 +7,29 @@ from statistics import mean
 # Create your models here.
 class Author(models.Model):
     openlibrary_key = models.CharField(max_length=20, primary_key=True)
-    name = models.CharField(max_length=32)
-    biography = models.TextField()
-    birth_date = models.DateField()
+    name = models.CharField(max_length=128)
+    biography = models.TextField(blank=True, null=True)
+    birth_date = models.DateField(blank=True, null=True)
     decease_date = models.DateField(blank=True, null=True)
-    image = models.ImageField()
-
-    def __unicode__(self):
-        return self.name
-
-class Publisher(models.Model):
-    name = models.CharField(max_length=32)
+    image = models.ImageField(blank=True, null=True)
 
     def __unicode__(self):
         return self.name
 
 class LiteraryGenre(models.Model):
-    name = models.CharField(max_length=32)
+    name = models.CharField(max_length=128, unique=True)
 
     def __unicode__(self):
         return self.name
 
-class Language(models.Model):
-    code = models.CharField(max_length=8)
-    name = models.CharField(max_length=32)
-
-    def __unicode__(self):
-        return f"{self.code - self.name}"
 
 class Book(models.Model):
-    openlibrary_book_key = models.CharField(max_length=15, primary_key=True)
-    ISBN = models.CharField(max_length=13)
-    title = models.CharField(max_length=32)
-    publish_date = models.DateField()
-    pages_number = models.PositiveIntegerField()
-    summary = models.TextField()
-    edition = models.CharField(max_length=32)
+    openlibrary_key = models.CharField(max_length=20, primary_key=True)
+    name = models.CharField(max_length=128)
+    biography = models.TextField(blank=True, null=True)
+    birth_date = models.DateField(blank=True, null=True)
+    decease_date = models.DateField(blank=True, null=True)
     image = models.ImageField(blank=True, null=True)
-    language = models.ForeignKey(Language, on_delete=models.CASCADE)
-    addition_date = models.DateTimeField(auto_now_add=True)
 
     def __unicode__(self):
         return self.title
@@ -57,6 +41,16 @@ class Book(models.Model):
             return mean(qualifications)
         return None
 
+class LiteraryGenreInBook(models.Model):
+    book = models.ForeignKey(Book, on_delete=models.CASCADE)
+    literary_genre = models.ForeignKey(LiteraryGenre, on_delete=models.CASCADE)
+
+    def __unicode__(self):
+        return f"{self.book.title} - {self.literary_genre.name}"
+
+    class Meta:
+        unique_together = ("book", "literary_genre")
+
 class AuthorInBook(models.Model):
     author = models.ForeignKey(Author, on_delete=models.CASCADE)
     book = models.ForeignKey(Book, on_delete=models.CASCADE)
@@ -64,12 +58,8 @@ class AuthorInBook(models.Model):
     def __unicode__(self):
         return f"{self.book.title} - {self.author.name}"
 
-class LiteraryGenreInBook(models.Model):
-    literary_genre = models.ForeignKey(LiteraryGenre, on_delete=models.CASCADE)
-    book = models.ForeignKey(Book, on_delete=models.CASCADE)
-
-    def __unicode__(self):
-        return f"{self.book.title} - {self.literary_genre.name}"
+    class Meta:
+        unique_together = ("book", "author")
 
 class Review(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
