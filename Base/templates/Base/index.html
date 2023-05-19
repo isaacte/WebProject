@@ -26,30 +26,21 @@
       </div>
     <button id="brb-see-more-button" type="button" class="btn mb-3 btn-outline-dark">See more</button>
 
-    {% for theme in themes %}
-    <h1 class="fs-3">{{theme.name}}</h1>
+    <h1 class="fs-3">Subjects</h1>
     <hr>
-    <div class="row" id="{{theme.name}}">
-      {% for i in '123456'|make_list %}
-        <div class="col-sm-6 col-md-4 col-lg-2">
-          <div class="card mb-3" aria-hidden="true">
-              <img src="../../static/images/loading_background.avif" class="card-img-top" alt="INSERTAR AQUÍ IMAGEN">
-              <div class="card-body">
-                <h5 class="card-title placeholder-glow"><span class="placeholder col-6"></span></h5>
-                <p class="card-text placeholder-glow">
-                  <span class="placeholder col-7"></span>
-                  <span class="placeholder col-4"></span>
-                  <span class="placeholder col-4"></span>
-                  <span class="placeholder col-6"></span>
-                  <span class="placeholder col-8"></span>
-                </p>
-              </div>
-          </div>
-        </div>
-      {% endfor %}
-    </div>
-  <button id="brb-see-more-button" type="button" class="btn mb-3 btn-outline-dark">See more</button>
-    {% endfor %}
+    <ul id="subjects-list" class="list-group list-group-flush">
+      <li class="list-group-item list-group-item-action cursor-pointer" data-subject="art">Art</li>
+      <li class="list-group-item list-group-item-action cursor-pointer" data-subject="animals">Animals</li>
+      <li class="list-group-item list-group-item-action cursor-pointer" data-subject="fiction">Fiction</li>
+      <li class="list-group-item list-group-item-action cursor-pointer" data-subject="sciencemathematics">Science/Mathematics</li>
+      <li class="list-group-item list-group-item-action cursor-pointer" data-subject="business">Business</li>
+      <li class="list-group-item list-group-item-action cursor-pointer" data-subject="juvenile_fiction">Juvenile fiction</li>
+      <li class="list-group-item list-group-item-action cursor-pointer" data-subject="history">History</li>
+      <li class="list-group-item list-group-item-action cursor-pointer" data-subject="health">Health</li>
+      <li class="list-group-item list-group-item-action cursor-pointer" data-subject="biography">Biography</li>
+      <li class="list-group-item list-group-item-action cursor-pointer" data-s  ubject="psychology">Psychology</li>
+      <li class="list-group-item list-group-item-action cursor-pointer" data-subject="textbooks">Text books</li>
+    </ul>
 {% endblock %}
 
 {% block js %}

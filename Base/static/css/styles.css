@@ -11,6 +11,11 @@ body {
     font-family: Arial, sans-serif;
 }
 
+/* General styles */
+.cursor-pointer {
+    cursor: pointer;
+}
+
 /* Header styles */
 header {
     background-color: var(--gray);
