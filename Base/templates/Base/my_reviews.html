@@ -1,0 +1,39 @@
+{% extends "Base/base.html" %}
+
+{% block title %}My reviews{% endblock %}
+
+{% block content %}
+    <h1>{{ user.username }}'s reviews</h1>
+    <hr>
+    <div class="row" id="user-library">
+        {% if reviews %}
+                    <div class="review-list">
+                        {% for review in reviews %}
+                            <div class="review">
+                                <div class="review-header">
+                                    <div class="review-info"><h4>{{ review.book.title }} - {{review.date}}</h4></div>
+                                    <div class="review-rating">
+                                        {% for _ in "x"|rjust:review.qualification|make_list %}
+                                            <i class="fas fa-star"></i>
+                                        {% endfor %}
+                                    </div>
+                                    <div class="d-flex">
+                                        <img style="width: 20%" src="{{ review.book.image.url }}">
+                                        <div class="d-block" style="margin: 20px">
+                                            <div class="review-comment"><p>Comment:</p>{{ review.comment }}</div>
+                                            <div class="review-actions" style="margin-top: 20px">
+                                                <a href="{% url 'edit_review' review.book.openlibrary_key %}" class="btn btn-primary">Edit</a>
+                                                <a href="{% url 'delete_review' review.book.openlibrary_key %}" class="btn btn-danger">Delete</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <hr class="review-separator">
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <p>No reviews available for this book.</p>
+                {% endif %}
+      </div>
+{% endblock %}

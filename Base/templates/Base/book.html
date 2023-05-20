@@ -56,7 +56,7 @@
                         <th scope="row">Genres</th>
                         <td id="genres-field">
                             {% for genre in genres %}
-                                <a class="link-secondary" href="{% url 'subject' sub=genre.literary_genre.name %}">{{ genre.literary_genre.name }}</a>{% if not forloop.last %}, {% endif %}
+                                <a class="link-secondary" href="{% url 'subject' genre.literary_genre.clean_name %}">{{ genre.literary_genre.name }}</a>{% if not forloop.last %}, {% endif %}
                             {% endfor %}
                         </td>
                     </tr>

@@ -27,6 +27,10 @@ def index(request):
 def my_books(request):
     return render(request, 'Base/my_books.html')
 
+@login_required
+def my_reviews(request):
+    return render(request, 'Base/my_reviews.html', {'reviews': request.user.review_set.all()})
+
 def author(request, author_id):
     a = get_object_or_404(Author, openlibrary_key = author_id)
     return render(request, 'Base/author.html', {'author': a})
@@ -38,7 +42,10 @@ def book(request, book_id):
     a = b.authorinbook_set.all()
     g = b.literarygenreinbook_set.all()
     r = Review.objects.filter(book = b)
-    ur = Review.objects.filter(user = request.user, book = b).exists()
+    if request.user.is_authenticated:
+        ur = Review.objects.filter(user = request.user, book = b).exists()
+    else:
+        ur = False
     return render(request, 'Base/book.html', {'book': b, 'authors': a, 'genres': g, 'reviews': r, 'user_review_exists': ur})
 
 @login_required
@@ -85,10 +92,6 @@ def delete_review(request, book_id):
     ur = get_object_or_404(Review, book = b, user=request.user)
     ur.delete()
     return redirect('book', book_id = book_id)
-
-def search_book(request, query):
-    result = requests.get(f'https://openlibrary.org/search.json?q={query}')
-    return JsonResponse(result.json())
 
 def subject(request, sub):
     return render(request, 'Base/subject.html', {'subject': sub})
