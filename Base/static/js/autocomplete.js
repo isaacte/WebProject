@@ -26,25 +26,12 @@ $(function () {
       });
     },
     select: function (event, ui) {
-      selectedEditionKey = ui.item.editionKey; // Almacena el edition key del libro seleccionado en la variable global
-      redirectToBookPage();
+      redirectToBookPage(ui.item.editionKey);
     }
   });
 
   // Función para redirigir a la página del libro
-  function redirectToBookPage() {
-    if (selectedEditionKey) {
-      // Redirige a la URL con el edition key del libro seleccionado
-      window.location.href = 'http://127.0.0.1:8000/book/' + selectedEditionKey;
-    } else {
-      // Si no se ha seleccionado ningún libro, redirige a la página principal
-      window.location.href = 'http://127.0.0.1:8000';
-    }
+  function redirectToBookPage(book_id) {
+      window.location.href = '/book/' + book_id;
   }
-
-  document.addEventListener('keydown', function (event) {
-    if (event.key === 'Enter') {
-      redirectToBookPage();
-    }
-  });
 });
