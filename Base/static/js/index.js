@@ -9,19 +9,21 @@ const listBooks = () => {
         type: "GET",
         success: function(data) {
             let books = data.results;
+            var bestRatedBooks = document.getElementById("best-rated-books");
+            var html = "";
             if (books.length == 0) {
                 console.log("There aren't books");
+                html += `<div class="alert alert-warning" role="alert">
+                There aren't more books :(
+              </div>`
             } else {
-                var bestRatedBooks = document.getElementById("best-rated-books");
-                var html = "";
                 // Add info to HTML
                 for (const i in books) {
-                    console.log(data)
                     let authors = getAuthorsString(books[i], MAX_WRITERS_SHOWED);
                     html += getBookCard(books[i], authors);
                 }
-                bestRatedBooks.innerHTML = html;
             }
+            bestRatedBooks.innerHTML = html;
         },
         error: function(error) {
             console.log(error);
@@ -31,7 +33,6 @@ const listBooks = () => {
 
 // Return the names of the book's authors
 const getAuthorsString = (book, maxAuthors = -1) => {
-    console.log(book.authors)
     authors = book.authors;
 
     // Convert list to sting
@@ -63,7 +64,6 @@ const getBookCard = (book, authors) => {
         cover = "../../static/images/NoCover.jpeg";
     } else {
         cover = book["image"];
-        console.log(cover);
     }
     if (book["summary"] == null) {
         summary = "There aren't any summary for this book :(";
@@ -94,6 +94,7 @@ const setUp = () => {
 }
 
 window.addEventListener("load", () => {
+    offset = BOOKS_SHOWN;
     setUp();
 });
 
@@ -106,3 +107,35 @@ for (i = 0; i < listItems.length; i++) {
         location.href = `./subject/${subject}`;
     });
 }
+
+seeMoreButton = document.getElementById('see-more-button');
+
+seeMoreButton.addEventListener('click', () => {
+    $.ajax({
+        url: `/api/books/?ordering=qualification_avg&only_reviewed=1&offset=${offset}&limit=${BOOKS_SHOWN}`,
+        type: "GET",
+        success: function(data) {
+            offset += BOOKS_SHOWN;
+            let books = data.results;
+            var bestRatedBooks = document.getElementById("best-rated-books");
+            var html = bestRatedBooks.innerHTML;
+
+            if (books.length == 0) {
+                console.log("There aren't books");
+                html += `<div class="alert alert-warning" role="alert">
+                There aren't more books :(
+              </div>`
+            } else {
+                // Add info to HTML
+                for (const i in books) {
+                    let authors = getAuthorsString(books[i], MAX_WRITERS_SHOWED);
+                    html += getBookCard(books[i], authors);
+                }
+            }
+            bestRatedBooks.innerHTML = html;
+        },
+        error: function(error) {
+            console.log(error);
+        }
+    });
+});
