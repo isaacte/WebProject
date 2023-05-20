@@ -29,7 +29,7 @@ class Book(models.Model):
     summary = models.TextField(blank=True, null=True)
     image = models.ImageField(blank=True, null=True)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.title
 
 
