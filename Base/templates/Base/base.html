@@ -39,7 +39,7 @@
                                 </li>
                                 {% if user.is_authenticated %}
                                     <li class="nav-item mx-2">
-                                        <a class="nav-link" href="/my_books">My books</a>
+                                        <a class="nav-link" href="{% url 'my_books' %}">My books</a>
                                     </li>
                                     <li class="nav-item dropdown">
                                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
