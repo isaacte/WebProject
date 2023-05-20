@@ -1,10 +1,11 @@
 // Constants declaration
 MAX_WRITERS_SHOWED = 2;
+BOOKS_SHOWN = 6;
 
 // Return a list of books from a json object. Return null if there aren't any book.
 const listBooks = () => {
     $.ajax({
-        url: "./api/books",
+        url: `./api/books?limit=${BOOKS_SHOWN}`,
         type: "GET",
         success: function(data) {
             books = data.results;
