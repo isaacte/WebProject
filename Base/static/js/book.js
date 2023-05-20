@@ -1,14 +1,3 @@
-// Return a list of books from a json object. Return null if there aren't any book.
-const getBook = async() => {
-    // try {
-    //     const response = await fetch(`../api/books/${openlibrary_key}`);
-    //     const data = await response.json();
-    //     return data;
-    // } catch (error) {
-    //     console.log(error);
-    // }
-}
-
 let thisBook = null;
 
 // Return the names of the book's authors
@@ -57,7 +46,6 @@ const setUp = async() => {
 }
 
 window.addEventListener("load", async () => {
-    console.log(`${book}`);
     await setUp();
 });
 
