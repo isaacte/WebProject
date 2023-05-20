@@ -3,48 +3,14 @@ function handleClick(event){
     window.location.href = `/book/${event.target.closest('.book-content').getAttribute('book_id')}`;
 }
 
-let cleanSubject = subject.replace(/ /g, '_').toLowerCase();
-$(document).ready(function() {
-  $.ajax({
-    url: `https://openlibrary.org/subjects/${cleanSubject}.json?offset=0&limit=50`,
-    method: 'GET',
-    success: function(data) {
-      let bookCards = document.getElementsByClassName('book-content');
-      for (let i = 0; i<50; i++){
-          let parent = bookCards[i];
-          parent.addEventListener('click', handleClick);
-          parent.style.cursor = "pointer"
-          let key = data['works'][i]["key"].match(regex)[1]
-          parent.setAttribute("book_id", key)
-          if (data['works'][i]['cover_id']){
-              parent.querySelector('[role="img"]').src = `https://covers.openlibrary.org/b/id/${data['works'][i]['cover_id']}-M.jpg`
-          } else {
-              parent.querySelector('[role="img"]').src = emptyCover;
-          }
+window.onload = function(){load_books(); console.log('load')}
 
-          parent.querySelector('[role="title"]').innerText = data['works'][i]['title']
-          let authors = "";
-          for (let author in data['works'][i]['authors']){
-              if (author > 2){
-                  authors += "..." + "\n";
-                  break;
-              }
-            authors += data['works'][i]['authors'][author]["name"];
-              if (author + 1 < data['works'][i]['authors'].length){
-                  authors += ", "
-              }
-          }
-          parent.querySelector('[role="authors"]').innerHTML = authors
-      }
-    },
-    error: function(xhr, status, error) {
-      console.log('Error:', error);
-    }
-  });
-});
-let offset = 50;
+let cleanSubject = subject.replace(/ /g, '_').replace('&amp', '&').toLowerCase();
+let offset = 0;
 let loading = false;
-window.onscroll = function(ev) {
+window.onscroll = function (ev){load_books(ev)}
+
+    function load_books (ev) {
         if ((window.innerHeight + Math.round(window.scrollY)) + 100 >= document.body.offsetHeight && !loading) {
                 console.log('load')
                 loading = true

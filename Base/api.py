@@ -7,7 +7,6 @@ from django.db.models import Avg, F
 import requests
 
 class BookViewSet(viewsets.ModelViewSet):
-    queryset = Book.objects.annotate(qualification_avg=Avg('review__qualification'))
     permission_classes = [permissions.AllowAny]
     serializer_class = BookSerializer
     filter_backends = [filters.OrderingFilter]
@@ -18,6 +17,13 @@ class BookViewSet(viewsets.ModelViewSet):
         if ordering == 'qualification':
             return ['-qualification_avg']
         return [ordering]
+
+    def get_queryset(self):
+        queryset = Book.objects.annotate(qualification_avg=Avg('review__qualification'))
+        only_reviewed = self.request.query_params.get('only_reviewed')
+        if only_reviewed == '1':
+            queryset = queryset.filter(qualification_avg__isnull=False)
+        return queryset
 
 class AuthorInBookViewSet(viewsets.ModelViewSet):
     queryset = AuthorInBook.objects.all()

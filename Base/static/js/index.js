@@ -4,10 +4,10 @@ MAX_WRITERS_SHOWED = 2;
 // Return a list of books from a json object. Return null if there aren't any book.
 const listBooks = () => {
     $.ajax({
-        url: "./api/books",
+        url: "/api/books/?ordering=qualification_avg&only_reviewed=1&limit=10",
         type: "GET",
         success: function(data) {
-            books = data.results;
+            let books = data.results;
             if (books.length == 0) {
                 console.log("There aren't books");
             } else {
@@ -15,7 +15,8 @@ const listBooks = () => {
                 var html = "";
                 // Add info to HTML
                 for (const i in books) {
-                    var authors = getAuthorsString(books[i], MAX_WRITERS_SHOWED);
+                    console.log(data)
+                    let authors = getAuthorsString(books[i], MAX_WRITERS_SHOWED);
                     html += getBookCard(books[i], authors);
                 }
                 bestRatedBooks.innerHTML = html;
@@ -29,6 +30,7 @@ const listBooks = () => {
 
 // Return the names of the book's authors
 const getAuthorsString = (book, maxAuthors = -1) => {
+    console.log(book.authors)
     authors = book.authors;
 
     // Convert list to sting
@@ -36,11 +38,11 @@ const getAuthorsString = (book, maxAuthors = -1) => {
     if (authors.length == 0) {
         return "Anonymous";
     } else {
-        var authorsString = `<a class="author-link link-secondary" href="author/${authors[0].id}">${authors[0].name}</a>`;
+        var authorsString = `<a class="author-link link-secondary" href="author/${authors[0].openlibrary_key}">${authors[0].name}</a>`;
         authorsAdded++;
         authors.shift();
         while (authors.length > 0 && (maxAuthors == -1 || authorsAdded < maxAuthors)) {
-            authorsString += `, <a class="author-link link-secondary" href="author/${authors[0].id}">${authors[0].name}</a>`;
+            authorsString += `, <a class="author-link link-secondary" href="author/${authors[0].openlibrary_key}">${authors[0].name}</a>`;
             authorsAdded++;
             authors.shift();
         }
