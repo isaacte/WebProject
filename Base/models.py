@@ -19,6 +19,10 @@ class Author(models.Model):
 class LiteraryGenre(models.Model):
     name = models.CharField(max_length=128, unique=True)
 
+    @property
+    def clean_name(self):
+        return self.name.replace('/', '')
+
     def __unicode__(self):
         return self.name
 
@@ -29,7 +33,7 @@ class Book(models.Model):
     summary = models.TextField(blank=True, null=True)
     image = models.ImageField(blank=True, null=True)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.title
 
 
