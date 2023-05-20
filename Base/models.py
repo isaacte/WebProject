@@ -17,7 +17,7 @@ class Author(models.Model):
         return self.name
 
 class LiteraryGenre(models.Model):
-    name = models.CharField(max_length=128, unique=True)
+    name = models.TextField(unique=True)
 
     @property
     def clean_name(self):
