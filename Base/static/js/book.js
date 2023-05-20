@@ -1,13 +1,15 @@
 // Return a list of books from a json object. Return null if there aren't any book.
 const getBook = async() => {
-    try {
-        const response = await fetch(`../api/books/${bookIsbn}`);
-        const data = await response.json();
-        return data;
-    } catch (error) {
-        console.log(error);
-    }
+    // try {
+    //     const response = await fetch(`../api/books/${openlibrary_key}`);
+    //     const data = await response.json();
+    //     return data;
+    // } catch (error) {
+    //     console.log(error);
+    // }
 }
+
+let thisBook = null;
 
 // Return the names of the book's authors
 const getAuthorsString = (book) => {
@@ -34,17 +36,28 @@ const getAuthorsString = (book) => {
 
 // Load books of the main screen
 const setUp = async() => {
-    book = await getBook();
-    authorsField = document.getElementById("authors-field");
-    var html = "";
-        
-    // Add info to HTML
-    html = getAuthorsString(book);
-    authorsField.innerHTML = html;
+    // book = await getBook();
+    $.ajax({
+        url: `./api/books/${openlibrary_key}`,
+        type: "GET",
+        success: function(book) {
+            thisBook = book;
+            authorsField = document.getElementById("authors-field");
+            var html = "";
+                
+            // Add info to HTML
+            html = getAuthorsString(book);
+            authorsField.innerHTML = html;
+            
+        },
+        error: function(error) {
+            console.log(error);
+        }
+    });
 }
 
 window.addEventListener("load", async () => {
-    console.log(bookIsbn);
+    console.log(`${book}`);
     await setUp();
 });
 
@@ -54,8 +67,23 @@ removeBookButton = document.getElementById("remove-book-button");
 added = false;
 
 // Add book in the user's list
-readButton.addEventListener('click', () => {
+readButton.addEventListener('click', async() => {
+    book = getBook(openlibrary_key);
+    console.log(`./api/books/${openlibrary_key}`);
     if (!added) {
+        $.ajax({
+            url: `/save_book`,
+            type: "POST",
+            dataType: "json",
+            data: JSON.stringify(thisBook),
+            success: function(response) {
+                console.log(response);
+            },
+            error: function(error) {
+                console.log(`ERROR: ${error}`);
+            }
+        });
+        
         readButton.classList.remove("btn-primary");
         readButton.classList.add("btn-success");
         readButton.setAttribute('data-bs-toggle', 'modal');

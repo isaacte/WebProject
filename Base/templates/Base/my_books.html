@@ -1,0 +1,32 @@
+{% extends "Base/base.html" %}
+
+{% block title %}My books{% endblock %}
+
+{% block content %}
+    <h1>{{ user.username }}'s books</h1>
+    <hr>
+    <div class="row" id="user-library">
+        {% for i in '123456'|make_list %}
+          <div class="col-3 col-sm-6 col-md-4 col-lg-2">
+            <div class="card mb-3" aria-hidden="true">
+                <img src="../../static/images/loading_background.avif" class="card-img-top" alt="INSERTAR AQUÍ IMAGEN">
+                <div class="card-body">
+                  <h5 class="card-title placeholder-glow"><span class="placeholder col-6"></span></h5>
+                  <p class="card-text placeholder-glow">
+                    <span class="placeholder col-7"></span>
+                    <span class="placeholder col-4"></span>
+                    <span class="placeholder col-4"></span>
+                    <span class="placeholder col-6"></span>
+                    <span class="placeholder col-8"></span>
+                  </p>
+                </div>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    <button id="brb-see-more-button" type="button" class="btn mb-3 btn-outline-dark">See more</button>
+{% endblock %}
+
+{% block js %}
+    <script src="../../static/js/my_books.js"></script>
+{% endblock %}

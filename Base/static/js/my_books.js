@@ -4,14 +4,14 @@ MAX_WRITERS_SHOWED = 2;
 // Return a list of books from a json object. Return null if there aren't any book.
 const listBooks = () => {
     $.ajax({
-        url: "./api/books",
+        url: "./api/user-books",
         type: "GET",
         success: function(data) {
             books = data.results;
             if (books.length == 0) {
                 console.log("There aren't books");
             } else {
-                var bestRatedBooks = document.getElementById("best-rated-books");
+                var bestRatedBooks = document.getElementById("user-library");
                 var html = "";
                 // Add info to HTML
                 for (const i in books) {
@@ -93,13 +93,3 @@ const setUp = () => {
 window.addEventListener("load", () => {
     setUp();
 });
-
-listItems = document.querySelectorAll(".list-group-item");
-
-for (i = 0; i < listItems.length; i++) {
-    let item = listItems[i];
-    item.addEventListener("click", () => {
-        subject = item.getAttribute('data-subject');
-        location.href = `./subject/${subject}`;
-    });
-}

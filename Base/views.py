@@ -1,12 +1,13 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate
+from django.contrib.auth.decorators import login_required
 from django.http.response import JsonResponse
-from Base.forms import RegisterForm
+from .forms import RegisterForm, ReviewForm
 from django.http import HttpRequest, HttpResponseBadRequest, HttpResponseNotFound
-from .models import Author, BookInUserLibrary
+from .models import Author, BookInUserLibrary, Review
 from django.shortcuts import get_object_or_404
 import requests
-from .utils import  get_book
+from .utils import get_book
 
 def register(request : HttpRequest):
     if request.method == 'POST':
@@ -20,19 +21,70 @@ def register(request : HttpRequest):
     return render(request, 'registration/register.html', {'form': form})
 
 def index(request):
-    return render(request, 'Base/index.html'    )
+    return render(request, 'Base/index.html')
+
+@login_required
+def my_books(request):
+    return render(request, 'Base/my_books.html')
 
 def author(request, author_id):
     a = get_object_or_404(Author, openlibrary_key = author_id)
     return render(request, 'Base/author.html', {'author': a})
 
-def book(request, key):
-    b = get_book(key)
+def book(request, book_id):
+    b = get_book(book_id)
     if not b:
         return HttpResponseNotFound("Book not found.")
     a = b.authorinbook_set.all()
     g = b.literarygenreinbook_set.all()
-    return render(request, 'Base/book.html', {'book': b, 'authors': a, 'genres': g})
+    r = Review.objects.filter(book = b)
+    ur = Review.objects.filter(user = request.user, book = b).exists()
+    return render(request, 'Base/book.html', {'book': b, 'authors': a, 'genres': g, 'reviews': r, 'user_review_exists': ur})
+
+@login_required
+def create_review(request, book_id):
+    b = get_book(book_id)
+    if not b:
+        return HttpResponseNotFound("Book not found.")
+    a = b.authorinbook_set.all()
+    g = b.literarygenreinbook_set.all()
+    r = Review.objects.filter(book = b)
+    if request.method == 'POST':
+        form = ReviewForm(request.POST)
+        if form.is_valid():
+            review = form.save(commit=False)
+            review.user = request.user
+            review.book = b
+            review.save()
+            return redirect('book', book_id)
+    else:
+        form = ReviewForm()
+    return render(request, 'Base/create_review.html', {'book': b, 'authors': a, 'genres': g, 'reviews': r, 'form': form})
+
+@login_required
+def edit_review(request, book_id):
+    b = get_book(book_id)
+    if not b:
+        return HttpResponseNotFound("Book not found.")
+    a = b.authorinbook_set.all()
+    g = b.literarygenreinbook_set.all()
+    r = Review.objects.filter(book = b)
+    ur = Review.objects.get(user = request.user, book = b)
+    if request.method == 'POST':
+        form = ReviewForm(request.POST, instance=ur)
+        if form.is_valid():
+            form.save()
+            return redirect('book', book_id)
+    else:
+        form = ReviewForm(instance = ur)
+    return render(request, 'Base/edit_review.html', {'book': b, 'authors': a, 'genres': g, 'reviews': r, 'form': form})
+
+@login_required
+def delete_review(request, book_id):
+    b = get_book(book_id)
+    ur = get_object_or_404(Review, book = b, user=request.user)
+    ur.delete()
+    return redirect('book', book_id = book_id)
 
 def search_book(request, query):
     result = requests.get(f'https://openlibrary.org/search.json?q={query}')
