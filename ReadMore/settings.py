@@ -23,7 +23,7 @@ env = environ.Env(
     DEBUG=(int, 0),
 )
 
-#Read .env file
+#Read .env.local file
 environ.Env.read_env(BASE_DIR / '.env')
 
 
@@ -37,6 +37,7 @@ SECRET_KEY = env('SECRET_KEY')
 DEBUG = env('DEBUG')
 
 ALLOWED_HOSTS = env.list('DJANGO_ALLOWED_HOSTS')
+CSRF_TRUSTED_ORIGINS = env.list('CSRF_TRUSTED_ORIGINS')
 
 # Application definition
 
@@ -83,7 +84,8 @@ WSGI_APPLICATION = 'ReadMore.wsgi.application'
 
 
 # Database
-# https://docs.djangoproject.com/en/4.1/ref/settings/#databases
+# https://docs.djan
+# goproject.com/en/4.1/ref/settings/#databases
 
 DATABASES = {
     "default": env.db()

@@ -21,9 +21,7 @@ def get_book(openlibrary_key):
         else:
             b.summary = result['description']
     if 'covers' in result:
-        image_req = requests.get(f'https://covers.openlibrary.org/b/id/{result["covers"][0]}-L.jpg')
-        image_data = ContentFile(image_req.content)
-        b.image.save(f'{result["covers"][0]}.jpg', image_data)
+        b.image = f'https://covers.openlibrary.org/b/id/{result["covers"][0]}-L.jpg'
     b.save()
     if 'authors' in result:
         for author in result['authors']:
@@ -52,8 +50,7 @@ def get_author(openlibrary_key):
     width, height = image.size
     num_pixels = width * height
     if num_pixels > 1:
-        image_data = ContentFile(image_req.content)
-        a.image.save(f'{openlibrary_key}.jpg', image_data)
+        a.image = f'https://covers.openlibrary.org/a/olid/{openlibrary_key}-L.jpg'
     if 'bio' in result:
         a.biography = result['bio']
     if 'birth_date' in result:
