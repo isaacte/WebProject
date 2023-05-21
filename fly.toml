@@ -1,9 +1,12 @@
-# fly.toml file generated for webproject-readmore on 2023-04-05T19:32:19+02:00
+# fly.toml app configuration file generated for webproject-readmore on 2023-05-21T13:40:49+02:00
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
 
 app = "webproject-readmore"
-kill_signal = "SIGINT"
-kill_timeout = 5
 primary_region = "mad"
+kill_signal = "SIGINT"
+kill_timeout = "5s"
 
 [build]
   dockerfile = "Dockerfile"
@@ -14,9 +17,9 @@ primary_region = "mad"
 [env]
   PORT = "8000"
 
-[[statics]]
-  guest_path = "/code/static"
-  url_prefix = "/static/"
+[[mounts]]
+  source = "read_more_files"
+  destination = "/media"
 
 [[services]]
   protocol = "tcp"
@@ -35,3 +38,7 @@ primary_region = "mad"
     type = "connections"
     hard_limit = 25
     soft_limit = 20
+
+[[statics]]
+  guest_path = "/code/static"
+  url_prefix = "/static/"

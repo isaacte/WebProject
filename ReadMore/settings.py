@@ -23,7 +23,7 @@ env = environ.Env(
     DEBUG=(int, 0),
 )
 
-#Read .env file
+#Read .env.local file
 environ.Env.read_env(BASE_DIR / '.env')
 
 
@@ -37,6 +37,7 @@ SECRET_KEY = env('SECRET_KEY')
 DEBUG = env('DEBUG')
 
 ALLOWED_HOSTS = env.list('DJANGO_ALLOWED_HOSTS')
+CSRF_TRUSTED_ORIGINS = env.list('CSRF_TRUSTED_ORIGINS')
 
 # Application definition
 
@@ -53,6 +54,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -66,7 +68,6 @@ ROOT_URLCONF = 'ReadMore.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -83,7 +84,8 @@ WSGI_APPLICATION = 'ReadMore.wsgi.application'
 
 
 # Database
-# https://docs.djangoproject.com/en/4.1/ref/settings/#databases
+# https://docs.djan
+# goproject.com/en/4.1/ref/settings/#databases
 
 DATABASES = {
     "default": env.db()
@@ -117,8 +119,6 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 
 USE_TZ = True
-
-WSGI_APPLICATION = 'ReadMore.wsgi.application'
 
 
 # Static files (CSS, JavaScript, Images)

@@ -4,7 +4,7 @@ MAX_WRITERS_SHOWED = 2;
 // Return a list of books from a json object. Return null if there aren't any book.
 const listBooks = () => {
     $.ajax({
-        url: "./api/user-books",
+        url: "/api/books/?only_user_books=1",
         type: "GET",
         success: function(data) {
             books = data.results;
