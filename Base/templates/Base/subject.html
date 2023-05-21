@@ -6,25 +6,6 @@
 {% block content %}
     <h1>{{ subject | title}} books</h1>
     <div class="row" id="books-container">
-    {% with ''|center:50 as range %}
-    {% for _ in range %}
-        <div class="col-3 col-sm-6 col-md-4 col-lg-2">
-            <div class="card mb-3 book-content" aria-hidden="true">
-                <img src="../../static/images/loading_background.avif" role="img" class="card-img-top" alt="INSERTAR AQUÍ IMAGEN">
-                <div class="card-body">
-                  <h5 class="card-title placeholder-glow" role="title"><span class="placeholder col-6"></span></h5>
-                  <p class="card-text placeholder-glow" role="authors">
-                    <span class="placeholder col-7"></span>
-                    <span class="placeholder col-4"></span>
-                    <span class="placeholder col-4"></span>
-                    <span class="placeholder col-6"></span>
-                    <span class="placeholder col-8"></span>
-                  </p>
-                </div>
-            </div>
-        </div>
-    {% endfor %}
-    {% endwith %}
 
     </div>
 {% endblock %}

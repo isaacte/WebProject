@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth import login, authenticate
+from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
-from django.http.response import JsonResponse
+from django.http.response import HttpResponse
 from .forms import RegisterForm, ReviewForm
 from django.http import HttpRequest, HttpResponseBadRequest, HttpResponseNotFound
 from .models import Author, BookInUserLibrary, Review
@@ -27,6 +27,10 @@ def index(request):
 def my_books(request):
     return render(request, 'Base/my_books.html')
 
+@login_required
+def my_reviews(request):
+    return render(request, 'Base/my_reviews.html', {'reviews': request.user.review_set.all()})
+
 def author(request, author_id):
     a = get_object_or_404(Author, openlibrary_key = author_id)
     return render(request, 'Base/author.html', {'author': a})
@@ -38,8 +42,15 @@ def book(request, book_id):
     a = b.authorinbook_set.all()
     g = b.literarygenreinbook_set.all()
     r = Review.objects.filter(book = b)
-    ur = Review.objects.filter(user = request.user, book = b).exists()
-    return render(request, 'Base/book.html', {'book': b, 'authors': a, 'genres': g, 'reviews': r, 'user_review_exists': ur})
+    if request.user.is_authenticated:
+        rbu = b.read_by_user(request.user)
+    else:
+        rbu = False
+    if request.user.is_authenticated:
+        ur = Review.objects.filter(user = request.user, book = b).exists()
+    else:
+        ur = False
+    return render(request, 'Base/book.html', {'book': b, 'authors': a, 'genres': g, 'reviews': r, 'user_review_exists': ur, 'read_by_user': rbu})
 
 @login_required
 def create_review(request, book_id):
@@ -86,20 +97,21 @@ def delete_review(request, book_id):
     ur.delete()
     return redirect('book', book_id = book_id)
 
-def search_book(request, query):
-    result = requests.get(f'https://openlibrary.org/search.json?q={query}')
-    return JsonResponse(result.json())
-
 def subject(request, sub):
     return render(request, 'Base/subject.html', {'subject': sub})
 
+@login_required
 def save_book(request):
     if request.method != 'POST':
         return HttpResponseBadRequest(f"Method not allowed.", status=405)
     b = get_book(request.POST.get('book_id'))
     if b:
-        if not BookInUserLibrary.objects.filter(book = b, user = request.user).exists():
+        if not b.read_by_user(request.user) and request.POST.get('action') == 'add':
             BookInUserLibrary.objects.create(book = b, user=request.user)
-            return JsonResponse(200, {})
+            return HttpResponse('')
+        elif b.read_by_user(request.user) and request.POST.get('action') == 'remove':
+            BookInUserLibrary.objects.get(book=b, user=request.user).delete()
+            return HttpResponse('')
         return HttpResponseBadRequest("Book already in your library.")
+
     return HttpResponseBadRequest("Book not found.")

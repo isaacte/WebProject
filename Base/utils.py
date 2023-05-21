@@ -16,20 +16,26 @@ def get_book(openlibrary_key):
     b = Book(openlibrary_key = openlibrary_key,
                                title = result['title'])
     if 'description' in result:
-        b.summary = result['description']
+        if 'value' in result['description']:
+            b.summary = result['description']['value']
+        else:
+            b.summary = result['description']
     if 'covers' in result:
         image_req = requests.get(f'https://covers.openlibrary.org/b/id/{result["covers"][0]}-L.jpg')
         image_data = ContentFile(image_req.content)
         b.image.save(f'{result["covers"][0]}.jpg', image_data)
     b.save()
-    for author in result['authors']:
-        key = re.search(r"/authors/(\w+)", author["author"]["key"]).group(1)
-        a = get_author(key)
-        AuthorInBook.objects.create(book=b, author=a)
-
-    for genre in result['subjects']:
-        genre_obj, created = LiteraryGenre.objects.get_or_create(name=genre)
-        LiteraryGenreInBook.objects.create(literary_genre=genre_obj, book=b)
+    if 'authors' in result:
+        for author in result['authors']:
+            if "author" in author:
+                author = author["author"]
+            key = re.search(r"/authors/(\w+)", author["key"]).group(1)
+            a = get_author(key)
+            AuthorInBook.objects.create(book=b, author=a)
+    if 'subjects' in result:
+        for genre in result['subjects']:
+            genre_obj, created = LiteraryGenre.objects.get_or_create(name=genre)
+            LiteraryGenreInBook.objects.create(literary_genre=genre_obj, book=b)
     return b
 
 def get_author(openlibrary_key):

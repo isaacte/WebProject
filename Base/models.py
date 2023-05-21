@@ -17,7 +17,11 @@ class Author(models.Model):
         return self.name
 
 class LiteraryGenre(models.Model):
-    name = models.CharField(max_length=128, unique=True)
+    name = models.TextField(unique=True)
+
+    @property
+    def clean_name(self):
+        return self.name.replace('/', '')
 
     def __unicode__(self):
         return self.name
@@ -29,7 +33,7 @@ class Book(models.Model):
     summary = models.TextField(blank=True, null=True)
     image = models.ImageField(blank=True, null=True)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.title
 
 
@@ -39,6 +43,9 @@ class Book(models.Model):
         if qualifications:
             return mean(qualifications)
         return None
+
+    def read_by_user(self, user):
+        return BookInUserLibrary.objects.filter(book = self, user=user).exists()
 
 class LiteraryGenreInBook(models.Model):
     book = models.ForeignKey(Book, on_delete=models.CASCADE)
