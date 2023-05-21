@@ -32,7 +32,7 @@ window.onscroll = function (ev){load_books(ev)}
                             }
                             let child = document.createElement("div");
                             let key = data['works'][book]["key"].match(regex)[1];
-                            child.classList.add("col-3", "col-3", "col-md-4", "col-lg-2");
+                            child.classList.add("col-sm-6", "col-md-4", "col-lg-2");
                             child.innerHTML = `
                             <div class="card mb-3 book-content" aria-hidden="true" book_id="${key}">
                                 <img src="${cover}" role="img" class="card-img-top">
