@@ -1,16 +1,3 @@
-// Return a list of books from a json object. Return null if there aren't any book.
-const getBook = async() => {
-    // try {
-    //     const response = await fetch(`../api/books/${openlibrary_key}`);
-    //     const data = await response.json();
-    //     return data;
-    // } catch (error) {
-    //     console.log(error);
-    // }
-}
-
-let thisBook = null;
-
 // Return the names of the book's authors
 const getAuthorsString = (book) => {
     authors = book.authors;
@@ -41,7 +28,7 @@ const setUp = async() => {
         url: `./api/books/${openlibrary_key}`,
         type: "GET",
         success: function(book) {
-            thisBook = book;
+            let thisBook = book;
             authorsField = document.getElementById("authors-field");
             var html = "";
                 
@@ -55,52 +42,62 @@ const setUp = async() => {
         }
     });
 }
+let readButton = document.getElementById("read-button");
+let removeBookButton = document.getElementById("remove-book-button");
 
-window.addEventListener("load", async () => {
-    console.log(`${book}`);
-    await setUp();
-});
+if (!added){
+    // Add book in the user's list
+    readButton.addEventListener('click', markAsRead);
+}
 
-readButton = document.getElementById("read-button");
-removeBookButton = document.getElementById("remove-book-button");
-
-added = false;
-
-// Add book in the user's list
-readButton.addEventListener('click', async() => {
-    book = getBook(openlibrary_key);
+function markAsRead()  {
     console.log(`./api/books/${openlibrary_key}`);
     if (!added) {
         $.ajax({
             url: `/save_book`,
+            data: {'book_id': openlibrary_key, action: 'add'},
             type: "POST",
-            dataType: "json",
-            data: JSON.stringify(thisBook),
+            beforeSend: function (xhr){
+                xhr.setRequestHeader('X-CSRFToken', csrftoken);
+            },
             success: function(response) {
-                console.log(response);
+                readButton.classList.remove("btn-primary");
+                readButton.classList.add("btn-success");
+                readButton.setAttribute('data-bs-toggle', 'modal');
+                readButton.setAttribute('data-bs-target', '#read-button-backdrop');
+                readButton.innerHTML = "Read";
+                readButton.removeEventListener('click', markAsRead)
+                added = true;
             },
             error: function(error) {
                 console.log(`ERROR: ${error}`);
             }
         });
-        
-        readButton.classList.remove("btn-primary");
-        readButton.classList.add("btn-success");
-        readButton.setAttribute('data-bs-toggle', 'modal');
-        readButton.setAttribute('data-bs-target', '#read-button-backdrop');
-        readButton.innerHTML = "Read";
-        added = true;
     }
-});
+}
 
 // Remove book from the user's list
 removeBookButton.addEventListener('click', () => {
     if (added) {
-        readButton.classList.remove("btn-success");
-        readButton.classList.add("btn-primary");
-        readButton.removeAttribute('data-bs-toggle');
-        readButton.removeAttribute('data-bs-target');
-        readButton.innerHTML = "Mark as read";
-        added = false;
+        $.ajax({
+            url: `/save_book`,
+            data: {'book_id': openlibrary_key, action: 'remove'},
+            type: "POST",
+            beforeSend: function (xhr){
+                xhr.setRequestHeader('X-CSRFToken', csrftoken);
+            },
+            success: function(response) {
+                readButton.classList.remove("btn-success");
+                readButton.classList.add("btn-primary");
+                readButton.removeAttribute('data-bs-toggle');
+                readButton.removeAttribute('data-bs-target');
+                readButton.innerHTML = "Mark as read";
+                added = false;
+                readButton.addEventListener('click', markAsRead);
+            },
+            error: function(error) {
+                console.log(`ERROR: ${error}`);
+            }
+        });
     }
 });

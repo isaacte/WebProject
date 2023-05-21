@@ -44,6 +44,9 @@ class Book(models.Model):
             return mean(qualifications)
         return None
 
+    def read_by_user(self, user):
+        return BookInUserLibrary.objects.filter(book = self, user=user).exists()
+
 class LiteraryGenreInBook(models.Model):
     book = models.ForeignKey(Book, on_delete=models.CASCADE)
     literary_genre = models.ForeignKey(LiteraryGenre, on_delete=models.CASCADE)
