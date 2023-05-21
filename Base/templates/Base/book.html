@@ -12,10 +12,11 @@
                 <img class="img-fluid" src="{{ book.image.url }}">
             {% endif %}
             <div class="d-grid gap-2">
-                <!-- <button type="button" id="read-button" class="btn btn-primary my-2">Mark as read</button> -->
-
-                <!-- Button trigger modal -->
+                {% if not read_by_user %}
                 <button type="button" id="read-button" class="btn btn-primary my-2">Mark as read</button>
+                {% else %}
+                <button type="button" id="read-button" class="btn my-2 btn-success" data-bs-toggle="modal" data-bs-target="#read-button-backdrop">Read</button>
+                {% endif %}
                 
                 <!-- Modal -->
                 <div class="modal fade" id="read-button-backdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
@@ -120,6 +121,8 @@
 {% block js %}
     <script>
         let openlibrary_key = '{{ book.openlibrary_key }}';
+        let csrftoken = '{{ csrf_token }}';
+        let added = {% if read_by_user %} true {% else %} false {% endif %};
     </script>
     <script src="../../static/js/book.js"></script>
 {% endblock %}
