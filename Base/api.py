@@ -1,12 +1,11 @@
-from rest_framework import viewsets, permissions, mixins, filters, generics, status
-from rest_framework.response import Response
+from rest_framework import viewsets, permissions, filters, generics, status
 
 from .models import Book, AuthorInBook, Author
-from .serializers import BookSerializer, AuthorInBookSerializer, AuthorSerializer, BookInUserLibrarySerializer
-from django.db.models import Avg, F
+from .serializers import BookSerializer, AuthorInBookSerializer, AuthorSerializer
+from django.db.models import Avg
 import requests
 
-class BookViewSet(viewsets.ModelViewSet):
+class BookViewSet(generics.ListAPIView, viewsets.GenericViewSet):
     permission_classes = [permissions.AllowAny]
     serializer_class = BookSerializer
     filter_backends = [filters.OrderingFilter]
@@ -21,8 +20,11 @@ class BookViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         queryset = Book.objects.annotate(qualification_avg=Avg('review__qualification'))
         only_reviewed = self.request.query_params.get('only_reviewed')
+        only_user_books = self.request.query_params.get('only_user_books')
         if only_reviewed == '1':
             queryset = queryset.filter(qualification_avg__isnull=False)
+        if only_user_books == '1':
+            queryset = queryset.filter(bookinuserlibrary__user=self.request.user)
         return queryset
 
 class AuthorInBookViewSet(viewsets.ModelViewSet):
@@ -35,7 +37,7 @@ class AuthorViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.AllowAny]
     serializer_class = AuthorSerializer
 
-class BooksFromUserSet(generics.ListCreateAPIView, viewsets.GenericViewSet):
+class BooksFromUserSet(generics.ListAPIView, viewsets.GenericViewSet):
     permission_classes = [permissions.IsAuthenticated]
     serializer_class = BookSerializer
     def get_queryset(self):
