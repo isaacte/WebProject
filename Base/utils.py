@@ -16,7 +16,10 @@ def get_book(openlibrary_key):
     b = Book(openlibrary_key = openlibrary_key,
                                title = result['title'])
     if 'description' in result:
-        b.summary = result['description']
+        if 'value' in result['description']:
+            b.summary = result['description']['value']
+        else:
+            b.summary = result['description']
     if 'covers' in result:
         image_req = requests.get(f'https://covers.openlibrary.org/b/id/{result["covers"][0]}-L.jpg')
         image_data = ContentFile(image_req.content)

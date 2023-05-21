@@ -17,7 +17,7 @@ class Author(models.Model):
         return self.name
 
 class LiteraryGenre(models.Model):
-    name = models.CharField(max_length=128, unique=True)
+    name = models.TextField(unique=True)
 
     @property
     def clean_name(self):
@@ -43,6 +43,9 @@ class Book(models.Model):
         if qualifications:
             return mean(qualifications)
         return None
+
+    def read_by_user(self, user):
+        return BookInUserLibrary.objects.filter(book = self, user=user).exists()
 
 class LiteraryGenreInBook(models.Model):
     book = models.ForeignKey(Book, on_delete=models.CASCADE)
