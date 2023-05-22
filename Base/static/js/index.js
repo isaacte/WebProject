@@ -5,7 +5,7 @@ BOOKS_SHOWN = 6;
 // Return a list of books from a json object. Return null if there aren't any book.
 const listBooks = () => {
     $.ajax({
-        url: `/api/books/?ordering=qualification_avg&only_reviewed=1&limit=${BOOKS_SHOWN}`,
+        url: `/api/books/?ordering=-qualification_avg&only_reviewed=1&limit=${BOOKS_SHOWN}`,
         type: "GET",
         success: function(data) {
             let books = data.results;
@@ -112,7 +112,7 @@ seeMoreButton = document.getElementById('see-more-button');
 
 seeMoreButton.addEventListener('click', () => {
     $.ajax({
-        url: `/api/books/?ordering=qualification_avg&only_reviewed=1&offset=${offset}&limit=${BOOKS_SHOWN}`,
+        url: `/api/books/?ordering=-qualification_avg&only_reviewed=1&offset=${offset}&limit=${BOOKS_SHOWN}`,
         type: "GET",
         success: function(data) {
             offset += BOOKS_SHOWN;
