@@ -4,19 +4,26 @@
 {% block title %}Index{% endblock %}
 
 {% block content %}
-    <h1>{{ author.name }}</h1>
-    <div class="row">
-        <div class="col-sm-12 col-md-6 col-lg-3 my-2">
-            {% if author.image %}
-                <img class="img-fluid" src="{{ author.image }}">
-            {% else %}
-                <img class="img-fluid" src="{% static 'images/person-dummy.jpg' %}">
-            {% endif %}
+    <span vocab="https://schema.org/" typeof="Person">
+        <h1><span property="name">{{ author.name }}</span></h1>
+        <div class="row">
+            <div class="col-sm-12 col-md-6 col-lg-3 my-2">
+                {% if author.image %}
+                    <img class="img-fluid" src="{{ author.image }}">
+                    <span property="image" content="{{ author.image }}"></span>
+                {% else %}
+                    <img class="img-fluid" src="{% static 'images/person-dummy.jpg' %}">
+                {% endif %}
+            </div>
+            <div class="col-sm-12 col-md-6 col-lg-9 my-2">
+                <h2>Biography</h2>
+                <hr class="review-separator">
+                <p>{% if author.biography %}
+                    <span property="description">{{ author.biography }}</span>
+                {% else %}
+                    We are sorry, at the moment, this author does not have a biography.
+                {% endif %}</p>
+            </div>
         </div>
-        <div class="col-sm-12 col-md-6 col-lg-9 my-2">
-            <h2>Biography</h2>
-            <hr class="review-separator">
-            <p>{% if author.biography %}{{ author.biography }}{% else %}We are sorry, at the moment, this author does not have a biography.{% endif %}</p>
-        </div>
-    </div>
+    </span>
 {% endblock %}

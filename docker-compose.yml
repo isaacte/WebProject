@@ -16,7 +16,7 @@ services:
       - db
     restart: always
     env_file:
-      - .env.local
+      - .env
   db:
     image: postgres
     volumes:

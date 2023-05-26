@@ -23,7 +23,7 @@ env = environ.Env(
     DEBUG=(int, 0),
 )
 
-#Read .env.local file
+#Read .env file
 environ.Env.read_env(BASE_DIR / '.env')
 
 
